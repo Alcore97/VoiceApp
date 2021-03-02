@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="SplashMain">20sp</dimen>
+    <dimen name="AishaMain">31sp</dimen>
+    <dimen name="AishaSpeak">16sp</dimen>
+</resources>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">VoiceApp</string>
+    <string name="AishaSplash">Aisha Voice Assistant</string>
+    <string name="AishaTopMain">What task do you want to help you with?</string>
+    <string name="AishaShop">Shopping List</string>
+    <string name="AishaToDo">To-Do List</string>
+    <string name="AishaEvent">Event List</string>
+    <string name="AishaTalkShop">"Aisha, make a Shopping List"</string>
+    <string name="AishaTalkToDo">"Aisha, make a To-Do List"</string>
+    <string name="AishaTalkEvent">"Aisha, make a Event List"</string>
+</resources>
