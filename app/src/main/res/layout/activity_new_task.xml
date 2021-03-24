@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:text="Task Name Field"
             android:textColor="@color/black">
-            
+
         </TextView>
 
         <EditText
