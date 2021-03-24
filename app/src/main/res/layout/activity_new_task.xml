@@ -64,7 +64,6 @@
             android:inputType="text"
             android:background="@drawable/background_scattered"
            >
-
         </EditText>
     </LinearLayout>
 
