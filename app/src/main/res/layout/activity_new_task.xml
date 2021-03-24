@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/customAleix"
+    tools:context=".ItemScreen">
+
+    <RelativeLayout
+        android:layout_width="350dp"
+        android:layout_height="70dp"
+        android:id="@+id/l1"
+        android:layout_marginLeft="40sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="40sp"
+        android:background="@drawable/background_dark"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/i1"
+            android:layout_width="33dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_task" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="18dp"
+            android:layout_toRightOf="@+id/i1"
+            android:text="@string/TitleNewTask"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/TitleShop"
+            android:id="@+id/ItemName"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/l1"
+        android:layout_above="@+id/l2"
+        android:orientation="vertical"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40sp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Task Name Field"
+            android:textColor="@color/black">
+            
+        </TextView>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/text1"
+            android:inputType="text"
+            android:background="@drawable/background_scattered"
+           >
+
+        </EditText>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/l2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/b1"
+            android:layout_width="match_parent"
+            android:layout_height="79dp"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_micro" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="45dp"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/ic_info" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="11dp"
+            android:src="@drawable/ic_speaker" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

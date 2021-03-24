@@ -5,10 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 
-public class MainActivity extends AppCompatActivity {
+public class MainMenu extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         ButtonToShop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, ShopScreen.class);
+                Intent myIntent = new Intent(MainMenu.this, ItemScreen.class);
                 startActivity(myIntent);
             }
         });
@@ -31,14 +30,14 @@ public class MainActivity extends AppCompatActivity {
         ButtonToToDo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, ToDoScreen.class);
+                Intent myIntent = new Intent(MainMenu.this, TaskScreen.class);
                 startActivity(myIntent);
             }
         });
         ButtonToEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, EventScreen.class);
+                Intent myIntent = new Intent(MainMenu.this, EventScreen.class);
                 startActivity(myIntent);
             }
         });

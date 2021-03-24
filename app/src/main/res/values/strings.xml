@@ -5,7 +5,10 @@
     <string name="AishaShop">Shopping List</string>
     <string name="AishaToDo">To-Do List</string>
     <string name="AishaEvent">Event List</string>
-    <string name="AishaTalkShop">"Aisha, make a Shopping List"</string>
-    <string name="AishaTalkToDo">"Aisha, make a To-Do List"</string>
-    <string name="AishaTalkEvent">"Aisha, make a Event List"</string>
+    <string name="AishaTalkShop">"Aisha, go to my Shopping List"</string>
+    <string name="AishaTalkToDo">"Aisha, go to my To-Do List"</string>
+    <string name="AishaTalkEvent">"Aisha, go to my Event List"</string>
+    <string name="TitleShop">Your Shoping List</string>
+    <string name="TitleToDo">Your To-Do List</string>
+    <string name="TitleNewTask">Your New Task</string>
 </resources>
