@@ -1,4 +1,14 @@
 package com.alcore.voiceapp;
 
-public class NewTaskScreen {
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+
+public class NewTaskScreen extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_task);
+    }
 }

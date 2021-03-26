@@ -73,7 +73,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginRight="45dp"
             android:layout_marginBottom="15dp"
-            android:src="@drawable/ic_info" />
+            android:src="@drawable/ic_info"
+            android:id="@+id/infoicon"/>
 
         <ImageView
             android:layout_width="wrap_content"

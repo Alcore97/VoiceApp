@@ -53,7 +53,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Task Name Field"
-            android:textColor="@color/black">
+            android:textColor="@color/black"
+            android:textSize="@dimen/SplashMain">
 
         </TextView>
 
@@ -63,7 +64,8 @@
             android:id="@+id/text1"
             android:inputType="text"
             android:background="@drawable/background_scattered"
-           >
+            android:hint="Enter the name of your task by voice"
+            android:paddingLeft="10dp">
         </EditText>
     </LinearLayout>
 

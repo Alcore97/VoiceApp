@@ -4,7 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,6 +26,8 @@ public class TaskScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_screen);
+
+        final ImageView InfoButton = findViewById(R.id.infoicon);
 
         taskRecyclerView = findViewById(R.id.recyclestask);
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -41,6 +47,14 @@ public class TaskScreen extends AppCompatActivity {
         taskRecyclerView = findViewById(R.id.recyclestask);
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         taskRecyclerView.setAdapter(new TaskAdapter(list));
+
+        InfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(TaskScreen.this, NewTaskScreen.class);
+                startActivity(myIntent);
+            }
+        });
     }
 
 }
