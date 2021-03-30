@@ -1,6 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/background_info"
+    tools:context=".ItemScreen">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="150dp"
+        android:layout_height="35dp"
+        android:id="@+id/l1"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/background_dark"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/TitleInfo"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/TitleShop" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_below="@+id/l1"
+        android:id="@+id/l2"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/background_veige">
+        <ImageView
+            android:id="@+id/i1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_speak"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/i1"
+            android:text="Aisha create new list X"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/AishaSpeak"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="20dp"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_below="@+id/l2"
+        android:id="@+id/l3"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/background_veige">
+        <ImageView
+            android:id="@+id/i2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_speak"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/i2"
+            android:text="Aisha create new list X"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/AishaSpeak"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="20dp"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_below="@+id/l3"
+        android:id="@+id/l4"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/background_veige">
+        <ImageView
+            android:id="@+id/i3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_speak"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/i3"
+            android:text="Aisha create new list X"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/AishaSpeak"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="20dp"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_below="@+id/l4"
+        android:id="@+id/l5"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/background_veige">
+        <ImageView
+            android:id="@+id/i4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_speak"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/i4"
+            android:text="Aisha create new list X"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/AishaSpeak"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="20dp"
+            />
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

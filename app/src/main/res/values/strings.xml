@@ -13,4 +13,5 @@
     <string name="TitleNewTask">Your New Task</string>
     <string name="TitleEvent">Your Event Screen</string>
     <string name="TitleNewEvent">Your New Event</string>
+    <string name="TitleInfo">Info</string>
 </resources>
