@@ -1,0 +1,52 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="vertical"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="25dp"
+    android:layout_marginHorizontal="40dp"
+    android:layout_marginVertical="20dp"
+    android:background="@drawable/background_veige">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_veige"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/eventname"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/icon_calendar"
+            android:paddingLeft="25dp"
+            android:text="Classe PTDMA"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:ellipsize="end">
+        </TextView>
+
+        <TextView
+            android:id="@+id/label_date"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:text="12:00AM"
+            android:paddingRight="25dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/icon_calendar"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_small_calen"
+            android:layout_toStartOf="@id/label_date"/>
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
