@@ -24,7 +24,7 @@
             android:layout_height="31dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/ic_shop" />
+            android:src="@drawable/ic_calen" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,27 +32,88 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="18dp"
             android:layout_toRightOf="@+id/i1"
-            android:text="@string/TitleShop"
+            android:text="@string/TitleNewEvent"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="@dimen/TitleShop" />
+            android:textSize="@dimen/TitleShop"
+            android:id="@+id/ItemName"/>
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/l1"
+        android:layout_below="@+id/l1"
         android:layout_above="@+id/l2"
-        android:id="@+id/recycleshop"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        android:orientation="vertical"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40sp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Task Name Field"
+            android:textColor="@color/black"
+            android:textSize="@dimen/SplashMain">
+
+        </TextView>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/text1"
+            android:inputType="text"
+            android:background="@drawable/background_scattered"
+            android:hint="Enter the name of your event by voice"
+            android:paddingLeft="10dp">
+        </EditText>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Event Date Field"
+            android:textColor="@color/black"
+            android:textSize="@dimen/SplashMain">
+
+        </TextView>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/text2"
+            android:inputType="text"
+            android:background="@drawable/background_scattered"
+            android:hint="Enter the date of yout event by voice"
+            android:paddingLeft="10dp">
+        </EditText>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Event Hour Field"
+            android:textColor="@color/black"
+            android:textSize="@dimen/SplashMain">
+
+        </TextView>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:id="@+id/text3"
+            android:inputType="text"
+            android:background="@drawable/background_scattered"
+            android:hint="Enter the hour of your event by voice"
+            android:paddingLeft="10dp">
+        </EditText>
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/l2"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
         <ImageView
@@ -71,9 +132,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginRight="45dp"
             android:layout_marginBottom="15dp"
-            android:src="@drawable/ic_info"
-            android:onClick="showAlertDialogButtonClicked"
-            android:id="@+id/infoicon"/>
+            android:src="@drawable/ic_info" />
 
         <ImageView
             android:layout_width="wrap_content"

@@ -11,4 +11,6 @@
     <string name="TitleShop">Your Shoping List</string>
     <string name="TitleToDo">Your To-Do List</string>
     <string name="TitleNewTask">Your New Task</string>
+    <string name="TitleEvent">Your Event Screen</string>
+    <string name="TitleNewEvent">Your New Event</string>
 </resources>

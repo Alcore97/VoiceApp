@@ -11,6 +11,7 @@
         android:theme="@style/Theme.VoiceApp">
         <activity android:name=".EventScreen"></activity>
         <activity android:name=".NewTaskScreen"></activity>
+        <activity android:name=".NewEventScreen"/>
         <activity android:name=".TaskScreen" />
         <activity android:name=".ItemScreen" />
         <activity android:name=".ProductScreen" />
