@@ -73,6 +73,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginRight="45dp"
             android:layout_marginBottom="15dp"
+            android:onClick="showAlertDialogButtonClicked"
             android:src="@drawable/ic_info"
             android:id="@+id/infoicon"/>
 

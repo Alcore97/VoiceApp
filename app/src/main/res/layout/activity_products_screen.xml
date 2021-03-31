@@ -71,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:onClick="showAlertDialogButtonClicked"
             android:layout_marginRight="45dp"
             android:layout_marginBottom="15dp"
             android:src="@drawable/ic_info" />

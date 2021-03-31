@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/i1"
-            android:text="Aisha create new list X"
+            android:text="Aisha, add new event"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/AishaSpeak"
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/i2"
-            android:text="Aisha show me X list"
+            android:text="Aisha, edit task ID"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/AishaSpeak"
@@ -119,7 +119,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/i3"
-            android:text="Aisha, add X to Y list"
+            android:text="Aisha, remove ID event"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/AishaSpeak"
@@ -128,44 +128,6 @@
             />
         <ImageView
             android:id="@+id/i3.5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_pencil"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="8dp"
-            />
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_below="@+id/l4"
-        android:id="@+id/l5"
-        android:layout_width="350dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="15dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20sp"
-        android:background="@drawable/background_veige">
-        <ImageView
-            android:id="@+id/i4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_speak"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="8dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/i4"
-            android:text="Aisha delete X list"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/AishaSpeak"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="20dp"
-            />
-        <ImageView
-            android:id="@+id/i4.5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -178,7 +140,7 @@
         android:layout_width="150dp"
         android:layout_height="40dp"
         android:id="@+id/backbutton"
-        android:layout_below="@+id/l5"
+        android:layout_below="@+id/l4"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"

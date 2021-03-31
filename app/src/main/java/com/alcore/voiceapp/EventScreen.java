@@ -1,5 +1,6 @@
 package com.alcore.voiceapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,16 +33,17 @@ public class EventScreen extends AppCompatActivity implements EventAdapter.Event
 
         eventRecyclerView = findViewById(R.id.recyclesevent);
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        list.add(new EventModel("Pepper","12:00AM"));
-        list.add(new EventModel("Tomato", "13:00AM"));
-        list.add(new EventModel("Apple","13:00AM"));
-        list.add(new EventModel("Pear","13:00AM"));
-        list.add(new EventModel("Googles","13:00AM"));
-        list.add(new EventModel("Glass","13:00AM"));
-        list.add(new EventModel("Ice","13:00AM"));
-        list.add(new EventModel("Gas","13:00AM"));
-        list.add(new EventModel("Fuel","13:00AM"));
-        list.add(new EventModel("Water","13:00AM"));
+        list.add(new EventModel("Pepper","12/02/20", "12:00AM"));
+        list.add(new EventModel("Pepper","12/02/20", "12:00AM"));
+        list.add(new EventModel("Pepper","12/02/20", "12:00AM"));
+        list.add(new EventModel("Pepper","12/02/20", "12:00AM"));
+        list.add(new EventModel("Pepper","12/02/20", "12:00AM"));
+        list.add(new EventModel("Pepper","12/02/20", "12:00AM"));
+        list.add(new EventModel("Pepper","12/02/20", "12:00AM"));
+        list.add(new EventModel("Pepper","12/02/20", "12:00AM"));
+        list.add(new EventModel("Pepper","12/02/20", "12:00AM"));
+        list.add(new EventModel("Pepper","12/02/20", "12:00AM"));
+
 
 
 
@@ -49,21 +51,25 @@ public class EventScreen extends AppCompatActivity implements EventAdapter.Event
         eventRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         eventRecyclerView.setAdapter(new EventAdapter(list,this));
 
-        InfoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(EventScreen.this, NewEventScreen.class);
-                startActivity(myIntent);
-            }
-        });
+    }
+    public void showAlertDialogButtonClicked(View view) {
+        // create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.activity_info_event, null);
+        builder.setView(customLayout);
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
     public void OnClickEvent(int position) {
         EventModel emodel = list.get(position);
         Intent myIntent = new Intent(EventScreen.this, NewEventScreen.class);
-        //myIntent.putExtra("eventname", emodel.name);
-        //myIntent.putExtra("eventdate", emodel.date);
+        myIntent.putExtra("eventname", emodel.name);
+        myIntent.putExtra("eventdate", emodel.date);
+        myIntent.putExtra("eventhour", emodel.hour);
         startActivity(myIntent);
     }
 }

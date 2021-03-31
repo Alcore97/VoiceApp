@@ -31,6 +31,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         EventModel list = product_list.get(position);
         holder.nameevent.setText(list.name);
+        holder.date.setText(list.date + list.hour);
     }
 
     @Override

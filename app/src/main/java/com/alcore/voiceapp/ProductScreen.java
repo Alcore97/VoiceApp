@@ -1,5 +1,6 @@
 package com.alcore.voiceapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,6 +51,16 @@ public class ProductScreen extends AppCompatActivity {
         productRecyclerView = findViewById(R.id.recyclesproduct);
         productRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         productRecyclerView.setAdapter(new ProductAdapter(list));
+    }
+    public void showAlertDialogButtonClicked(View view) {
+        // create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.activity_info_products, null);
+        builder.setView(customLayout);
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }
