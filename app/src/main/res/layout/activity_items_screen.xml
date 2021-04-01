@@ -56,7 +56,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/b1"
+            android:id="@+id/micro"
             android:layout_width="80dp"
             android:onClick="getSpeechInput"
             android:layout_centerHorizontal="true"
