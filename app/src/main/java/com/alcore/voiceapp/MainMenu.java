@@ -220,7 +220,8 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             Intent myIntent = new Intent(MainMenu.this, TaskScreen.class);
             startActivity(myIntent);
         }else if(message.contains("Event List")){
-
+            Intent myIntent = new Intent(MainMenu.this, EventScreen.class);
+            startActivity(myIntent);
         }
 
 

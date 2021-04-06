@@ -43,6 +43,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
     private static final int RECORD_AUDIO_CODE = 100;
     private ImageView micro;
     private TextToSpeech speaker;
+    private View view;
 
 
     @Override
@@ -61,7 +62,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
         list.add(new ItemModel("Tintoreria"));
         list.add(new ItemModel("Glovo"));
 
-
+        //If list is empty, show a message (PAVEL)
 
         shopRecyclerView = findViewById(R.id.recycleshop);
         shopRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -75,7 +76,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e("TTS", "Language not supported");
                     }else{
-                        speaker.speak("Hola Bona Tarda", QUEUE_FLUSH, null, "aleix");
+                        speaker.speak("What you want to do?", QUEUE_FLUSH, null, "aleix");
                     }
                 } else Log.e("TTS", "Unable to initialize speaker - ErrorCode: $status");
 
@@ -229,6 +230,48 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
             message += data.get(i);
         }
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+        if(message.contains("Help")){
+            showAlertDialogButtonClicked(view);
+        }else if(message.contains("Create")){
+            String[] object = message.split("list");
+            list.add(new ItemModel(object[1]));
+        }else if(message.contains("Show")){
+            String[] object = message.split("me");
+            int length = object[1].length();
+            String target = object[1].substring(0,length-5);
+            for(int i = 0; i < list.size(); ++i){
+                if(target.equals(list.get(i).getName())){
+                    Intent myIntent = new Intent(ItemScreen.this, ProductScreen.class);
+                    myIntent.putExtra("productlist", list.get(i).getName());
+                    startActivity(myIntent);
+                }
+            }
+        }
+        else if(message.contains("add")){
+            String[] object = message.split("to");
+            int prodsize = object[0].length();
+            int listsize = object[1].length();
+            String prod = object[0].substring(4,prodsize);
+            String lists = object[1].substring(0,listsize-5);
+            for(int i = 0; i < list.size(); ++i){
+                if(lists.equals(list.get(i).getName())) {
+                    //completar pavel
+                    list.get(i).products.add(prod);
+                }
+                }
+        }
+        else if(message.contains("delete")) {
+            String[] object = message.split("delete");
+            int length = object[1].length();
+            String target = object[1].substring(0, length - 5);
+            for (int i = 0; i < list.size(); ++i) {
+                if (target.equals(list.get(i).getName())) {
+                    list.remove(list.get(i));
+                }
+            }
+        }
+
 
 
     }
