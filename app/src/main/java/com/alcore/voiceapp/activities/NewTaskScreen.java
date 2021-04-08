@@ -1,8 +1,10 @@
-package com.alcore.voiceapp;
+package com.alcore.voiceapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.alcore.voiceapp.R;
 
 public class NewTaskScreen extends AppCompatActivity {
 

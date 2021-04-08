@@ -1,4 +1,4 @@
-package com.alcore.voiceapp;
+package com.alcore.voiceapp.activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,13 +6,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.alcore.voiceapp.R;
+import com.alcore.voiceapp.adapters.TaskAdapter;
+import com.alcore.voiceapp.models.TaskModel;
 
 import java.util.ArrayList;
 

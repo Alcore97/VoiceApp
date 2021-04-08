@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/customAleix"
-    tools:context=".MainMenu">
+    tools:context=".activities.MainMenu">
     
     <LinearLayout
         android:layout_width="match_parent"

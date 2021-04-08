@@ -1,9 +1,11 @@
-package com.alcore.voiceapp;
+package com.alcore.voiceapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.EditText;
+
+import com.alcore.voiceapp.R;
 
 public class NewEventScreen extends AppCompatActivity {
 

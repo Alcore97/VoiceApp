@@ -6,7 +6,7 @@
     android:layout_gravity="center"
     android:orientation="vertical"
     android:background="@drawable/background_info"
-    tools:context=".ItemScreen">
+    tools:context=".activities.ItemScreen">
 
     <RelativeLayout
         android:layout_width="150dp"

@@ -1,4 +1,4 @@
-package com.alcore.voiceapp;
+package com.alcore.voiceapp.activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,15 +7,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alcore.voiceapp.adapters.EventAdapter;
+import com.alcore.voiceapp.models.EventModel;
+import com.alcore.voiceapp.R;
+
 import java.util.ArrayList;
-import java.util.Date;
 
 public class EventScreen extends AppCompatActivity implements EventAdapter.EventController {
 

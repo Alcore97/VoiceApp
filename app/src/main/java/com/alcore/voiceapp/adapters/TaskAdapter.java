@@ -1,9 +1,12 @@
-package com.alcore.voiceapp;
+package com.alcore.voiceapp.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+
+import com.alcore.voiceapp.R;
+import com.alcore.voiceapp.models.TaskModel;
 
 import java.util.List;
 

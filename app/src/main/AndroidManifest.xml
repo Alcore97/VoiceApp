@@ -12,20 +12,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.VoiceApp">
-        <activity android:name=".EventScreen"></activity>
-        <activity android:name=".NewTaskScreen"></activity>
-        <activity android:name=".NewEventScreen"/>
-        <activity android:name=".TaskScreen" />
-        <activity android:name=".ItemScreen" />
-        <activity android:name=".ProductScreen" />
-        <activity android:name=".SplashScreen">
+        <activity android:name=".activities.EventScreen"></activity>
+        <activity android:name=".activities.NewTaskScreen"></activity>
+        <activity android:name=".activities.NewEventScreen"/>
+        <activity android:name=".activities.TaskScreen" />
+        <activity android:name=".activities.ItemScreen" />
+        <activity android:name=".activities.ProductScreen" />
+        <activity android:name=".activities.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenu" />
+        <activity android:name=".activities.MainMenu" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.alcore.voiceapp;
+package com.alcore.voiceapp.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;

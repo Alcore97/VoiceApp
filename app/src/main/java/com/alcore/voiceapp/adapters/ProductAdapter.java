@@ -1,9 +1,12 @@
-package com.alcore.voiceapp;
+package com.alcore.voiceapp.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+
+import com.alcore.voiceapp.R;
+import com.alcore.voiceapp.models.ProductModel;
 
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ProductModel list = product_list.get(position);
         holder.check.setText(list.name);
+        holder.check.setChecked(list.status);
     }
 
     @Override

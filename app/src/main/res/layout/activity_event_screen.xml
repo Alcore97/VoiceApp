@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/customAleix"
-    tools:context=".EventScreen">
+    tools:context=".activities.EventScreen">
 
     <RelativeLayout
         android:layout_width="350dp"
