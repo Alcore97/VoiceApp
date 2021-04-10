@@ -7,7 +7,7 @@ import java.util.List;
 public class ItemModel implements Serializable {
 
    public String name;
-   public List<String> products;
+   public List<ProductModel> products;
 
    public ItemModel(){
       this.name = "";
@@ -21,6 +21,10 @@ public class ItemModel implements Serializable {
 
    public String getName() {
       return name;
+   }
+
+   public List<ProductModel> getProducts(){
+      return products;
    }
 
 }

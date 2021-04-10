@@ -20,7 +20,6 @@
         android:text="@string/AishaSplash"
         android:textColor="@color/white"
         android:textSize="@dimen/AishaMain"
-        android:background="@drawable/background_dark"
             />
 
 </LinearLayout>

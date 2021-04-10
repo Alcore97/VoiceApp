@@ -23,6 +23,8 @@
                 android:id="@+id/checkbox"
                 android:layout_alignParentEnd="true"
                 android:text="Random Text"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:textColor="@color/black"
                 android:buttonTint="@android:color/black"
                 android:gravity="center"

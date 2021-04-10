@@ -1,5 +1,6 @@
 package com.alcore.voiceapp.activities;
 
+import Database.DB;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alcore.voiceapp.adapters.ProductAdapter;
+import com.alcore.voiceapp.models.ItemModel;
 import com.alcore.voiceapp.models.ProductModel;
 import com.alcore.voiceapp.R;
 
@@ -45,8 +47,10 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
     private TextView itemname;
     private ImageView micro;
     private TextToSpeech speaker;
-    private ArrayList<ProductModel> list = new ArrayList<>();
     private View view;
+    private int listid;
+    private int itempdel;
+    private Boolean waitdelete = false;
     private static final int RECORD_AUDIO_CODE = 100;
 
 
@@ -60,26 +64,16 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
         String name ="Your " + getIntent().getStringExtra("productlist") + " list";
         itemname.setText(name);
 
+        listid = getIntent().getIntExtra("listID",0);
+
+
+
         micro = findViewById(R.id.micro);
 
         productRecyclerView = findViewById(R.id.recyclesproduct);
         productRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        list.add(new ProductModel("Pepper"));
-        list.add(new ProductModel("Tomato"));
-        list.add(new ProductModel("Apple"));
-        list.add(new ProductModel("Pear"));
-        list.add(new ProductModel("Googles"));
-        list.add(new ProductModel("Glass"));
-        list.add(new ProductModel("Ice"));
-        list.add(new ProductModel("Gas"));
-        list.add(new ProductModel("Fuel"));
-        list.add(new ProductModel("Water"));
 
-
-
-        productRecyclerView = findViewById(R.id.recyclesproduct);
-        productRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        productRecyclerView.setAdapter(new ProductAdapter(list));
+        productRecyclerView.setAdapter(new ProductAdapter(DB.getShoppingList().get(listid).getProducts()));
 
         speaker = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -89,7 +83,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e("TTS", "Language not supported");
                     }else{
-                        speaker.speak("This is your shopping list", QUEUE_FLUSH, null, "aleix");
+                        speaker.speak("This is your " + name , QUEUE_FLUSH, null, "aleix");
                     }
                 } else Log.e("TTS", "Unable to initialize speaker - ErrorCode: $status");
 
@@ -97,6 +91,8 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
             }
         });
     }
+
+
     public void showAlertDialogButtonClicked(View view) {
         // create an alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -200,56 +196,79 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
         }
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
-        if(message.contains("Help")){
-            showAlertDialogButtonClicked(view);
+        message = message.toLowerCase();
+        if(!waitdelete) {
+            if (message.contains("help")) {
+                showAlertDialogButtonClicked(view);
 
-        }else if(message.contains("set")){
-            String prod = "";
-            Boolean trobat = false;
+            } else if (message.contains("mark") || message.contains("marc")) {
+                String prod = "";
+                Boolean trobat = false;
 
+                prod = message.substring(message.lastIndexOf(" ") + 1);
 
-            Pattern object = Pattern.compile("set (.*?) done");
-            Matcher matcher = object.matcher(message);
-            while(matcher.matches()){prod = matcher.group(1);}
-            for(int i = 0; i < list.size(); ++i){
-                if(prod.equals(list.get(i).getName())){
-                    trobat = true;
-                    list.get(i).setStatus(true);
-                    productRecyclerView.setAdapter(new ProductAdapter(list));
+                for (int i = 0; i < DB.getShoppingList().get(listid).products.size(); ++i) {
+                    if (prod.equals(DB.getShoppingList().get(listid).products.get(i).getName().toLowerCase())) {
+                        trobat = true;
+                        DB.getShoppingList().get(listid).products.get(i).setStatus(true);
+                        productRecyclerView.getAdapter().notifyDataSetChanged();
+                        productRecyclerView.scrollToPosition(DB.getShoppingList().get(listid).products.size() - 1);
+                    }
+                }
+                if (!trobat) {
+                    speaker.speak("This product doesn't exists", QUEUE_FLUSH, null, "aleix");
+                }
+            } else if (message.contains("insert")) {
+                String prod = "";
+                Boolean trobat = false;
+
+                Pattern object = Pattern.compile("insert (.*?) item");
+                Matcher matcher = object.matcher(message);
+                while (matcher.find()) {
+                    prod = matcher.group(1);
+                }
+                for (int i = 0; i < DB.getShoppingList().get(listid).products.size(); ++i) {
+                    if (prod.equals(DB.getShoppingList().get(listid).products.get(i).getName().toLowerCase())) {
+                        trobat = true;
+                    }
+                }
+                if (!trobat) {
+                    DB.getShoppingList().get(listid).products.add(new ProductModel(prod));
+                    // productRecyclerView.setAdapter(new ProductAdapter(list));
+                    productRecyclerView.getAdapter().notifyDataSetChanged();
+                    productRecyclerView.scrollToPosition(DB.getShoppingList().get(listid).products.size() - 1);
+                } else {
+                    speaker.speak("This product already exist", QUEUE_FLUSH, null, "aleix");
+                }
+            } else if (message.contains("delete")) {
+                String target = "";
+                Boolean trobat = false;
+                itempdel = 0;
+                target = message.substring(message.lastIndexOf(" ") + 1);
+
+                for (int i = 0; i < DB.getShoppingList().get(listid).products.size(); ++i) {
+                    if (target.equals(DB.getShoppingList().get(listid).products.get(i).getName().toLowerCase())) {
+                        trobat = true;
+                        itempdel = i;
+                    }
+                }
+                if(trobat){
+                    waitdelete = true;
+                    speaker.speak("Are you sure that you want to remove " + target + "?", QUEUE_FLUSH, null, "aleix");
+                }else{
+                    speaker.speak("This product doesn't exists", QUEUE_FLUSH, null, "aleix");
                 }
             }
-            if(!trobat){
-                speaker.speak("This product doesn't exists", QUEUE_FLUSH, null, "aleix");
-            }
-        }
-        else if(message.contains("add")){
-            String prod = "";
-            Boolean trobat = false;
-
-            Pattern object = Pattern.compile("add (.*?) item");
-            Matcher matcher = object.matcher(message);
-            while(matcher.matches()){prod = matcher.group(1);}
-            for(int i = 0; i < list.size(); ++i){
-                if(prod.equals(list.get(i).getName())) {
-                    trobat = true;
-                }
-            }
-            if(!trobat){
-                list.add(new ProductModel(prod));
-                productRecyclerView.setAdapter(new ProductAdapter(list));
+        }else{
+            waitdelete = false;
+            if(message.contains("yes")) {
+                DB.getShoppingList().get(listid).products.remove(DB.getShoppingList().get(listid).products.get(itempdel));
+                productRecyclerView.getAdapter().notifyDataSetChanged();
+            }else if(message.contains("no")){
+                waitdelete = false;
             }else{
-                speaker.speak("This product already exist", QUEUE_FLUSH, null, "aleix");
-            }
-        }
-        else if(message.contains("delete")) {
-            String[] object = message.split("delete");
-            int length = object[1].length();
-            String target = object[1].substring(0, length - 5);
-            for (int i = 0; i < list.size(); ++i) {
-                if (target.equals(list.get(i).getName())) {
-                    list.remove(list.get(i));
-                    productRecyclerView.setAdapter(new ProductAdapter(list));
-                }
+                waitdelete = true;
+                speaker.speak("I don't understood, could you say it again?", QUEUE_FLUSH, null, "aleix");
             }
         }
 

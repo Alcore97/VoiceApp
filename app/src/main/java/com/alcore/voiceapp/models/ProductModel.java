@@ -6,7 +6,7 @@ import java.util.List;
 public class ProductModel implements Serializable {
 
    public String name;
-   public Boolean status = false;
+   public boolean status = false;
 
    public ProductModel(){
       this.name = "";
@@ -18,7 +18,8 @@ public class ProductModel implements Serializable {
       return status;
    }
 
-   public void setStatus(Boolean status) {
+   public void setName(String name){ this.name = name;}
+   public void setStatus(boolean status) {
       this.status = status;
    }
 

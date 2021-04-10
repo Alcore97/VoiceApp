@@ -215,13 +215,15 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
         }
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
-        if(message.contains("shopping") || message.contains("Shopping")){
+        message = message.toLowerCase();
+
+        if(message.contains("shopping")){
             Intent myIntent = new Intent(MainMenu.this, ItemScreen.class);
             startActivity(myIntent);
-        }else if(message.contains("todo") || message.contains("Todo")){
+        }else if(message.contains("todo")){
             Intent myIntent = new Intent(MainMenu.this, TaskScreen.class);
             startActivity(myIntent);
-        }else if(message.contains("event") || message.contains("Event")){
+        }else if(message.contains("event")){
             Intent myIntent = new Intent(MainMenu.this, EventScreen.class);
             startActivity(myIntent);
         }

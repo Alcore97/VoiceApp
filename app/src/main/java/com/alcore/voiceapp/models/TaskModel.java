@@ -13,4 +13,8 @@ public class TaskModel implements Serializable {
     public TaskModel(String name){
         this.name = name;
     }
+
+    public String getName() {
+        return name;
+    }
 }

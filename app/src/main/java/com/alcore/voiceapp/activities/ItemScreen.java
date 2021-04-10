@@ -1,5 +1,6 @@
 package com.alcore.voiceapp.activities;
 
+import Database.DB;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -46,12 +48,13 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
     private RecyclerView shopRecyclerView;
     private TextView itemname;
     private String name;
-    private ArrayList<ItemModel> list = new ArrayList<>();
     private static final int RECORD_AUDIO_CODE = 100;
     private ImageView micro;
     private TextToSpeech speaker;
     private View view;
-
+    private int itemp;
+    private int itempdel;
+    private Boolean waitdelete = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,17 +66,12 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
 
         shopRecyclerView = findViewById(R.id.recycleshop);
         shopRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        list.add(new ItemModel("Caprabo"));
-        list.add(new ItemModel("Mediamarkt"));
-        list.add(new ItemModel("Amazon"));
-        list.add(new ItemModel("Tintoreria"));
-        list.add(new ItemModel("Glovo"));
 
         //If list is empty, show a message (PAVEL)
 
         shopRecyclerView = findViewById(R.id.recycleshop);
         shopRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        shopRecyclerView.setAdapter(new ItemAdapter(list,this));
+        shopRecyclerView.setAdapter(new ItemAdapter(DB.getShoppingList(),this));
 
         speaker = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -123,6 +121,8 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
 
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
+        intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, true);
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "com.alcore.voiceapp");
         speechRecognizer.startListening(intent);
     }
@@ -130,9 +130,10 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
 
     @Override
     public void OnClickItem(int position) {
-        ItemModel imodel = list.get(position);
+        ItemModel imodel = DB.getShoppingList().get(position);
         Intent myIntent = new Intent(ItemScreen.this, ProductScreen.class);
         myIntent.putExtra("productlist", imodel.name);
+        myIntent.putExtra("listID", position);
         startActivity(myIntent);
     }
 
@@ -239,56 +240,111 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         message = message.toLowerCase();
 
-        if(message.contains("help")){
-            showAlertDialogButtonClicked(view);
-        }else if(message.contains("Create") || message.contains("create")){
-            String newlist = "";
-            newlist = message.substring(message.lastIndexOf(" ")+1);
-            list.add(new ItemModel(newlist));
-            shopRecyclerView.setAdapter(new ItemAdapter(list,this));
-            shopRecyclerView.scrollToPosition(list.size()-1);
-        }else if(message.contains("show")){
-            String target = "";
-            Boolean ended = false;
-            int itemp = 0;
-            Pattern object = Pattern.compile("show (.*?) item");
-            Matcher matcher = object.matcher(message);
-            while(matcher.find()){target = matcher.group(1);}
-            for(int i = 0; i < list.size() && !ended; ++i){
-                if(target.equals(list.get(i).getName().toLowerCase())){
-                    ended = true;
-                    itemp = i;
+        if(!waitdelete) {
+            if (message.contains("help")) {
+                showAlertDialogButtonClicked(view);
+            } else if (message.contains("create")) {
+                String newlist = "";
+                newlist = message.substring(message.lastIndexOf(" ") + 1);
+                DB.getShoppingList().add(new ItemModel(newlist));
+                shopRecyclerView.getAdapter().notifyDataSetChanged();
+                shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
+            } else if (message.contains("show")) {
+                String target = "";
+                Boolean ended = false;
+                itemp = 0;
+                Pattern object = Pattern.compile("show (.*?) list");
+                Matcher matcher = object.matcher(message);
+                while (matcher.find()) {
+                    target = matcher.group(1);
                 }
-            }
-            ItemModel imodel = list.get(itemp);
-            Intent myIntent = new Intent(ItemScreen.this, ProductScreen.class);
-            myIntent.putExtra("productlist", imodel.name);
-            startActivity(myIntent);
+                for (int i = 0; i < DB.getShoppingList().size() && !ended; ++i) {
+                    if (target.equals(DB.getShoppingList().get(i).getName().toLowerCase())) {
+                        ended = true;
+                        itemp = i;
+                    }
+                }
 
-        }
-        else if(message.contains("add")){
-            String[] object = message.split("to");
-            int prodsize = object[0].length();
-            int listsize = object[1].length();
-            String prod = object[0].substring(4,prodsize);
-            String lists = object[1].substring(0,listsize-5);
-            for(int i = 0; i < list.size(); ++i){
-                if(lists.equals(list.get(i).getName())) {
-                    //completar pavel
-                    list.get(i).products.add(prod);
-                    shopRecyclerView.setAdapter(new ItemAdapter(list,this));
+                Intent myIntent = new Intent(ItemScreen.this, ProductScreen.class);
+                myIntent.putExtra("productlist", DB.getShoppingList().get(itemp).getName());
+                myIntent.putExtra("listID", itemp);
+                startActivity(myIntent);
+
+            } else if (message.contains("put")) {
+                String targetlist = "";
+                String target = "";
+
+                Boolean trobatllista = false;
+                Boolean trobatprod = false;
+                Pattern object = Pattern.compile("put (.*?) to");
+                Pattern objectlist = Pattern.compile("to (.*?) list");
+                Matcher matcher = object.matcher(message);
+                Matcher matcherlist = objectlist.matcher(message);
+                while (matcher.find()) {
+                    target = matcher.group(1);
                 }
+                while (matcherlist.find()) {
+                    targetlist = matcherlist.group(1);
                 }
-        }
-        else if(message.contains("delete")) {
-            String[] object = message.split("delete");
-            int length = object[1].length();
-            String target = object[1].substring(0, length - 5);
-            for (int i = 0; i < list.size(); ++i) {
-                if (target.equals(list.get(i).getName())) {
-                    list.remove(list.get(i));
-                    shopRecyclerView.setAdapter(new ItemAdapter(list,this));
+
+                ProductModel newprod = new ProductModel();
+                newprod.setName(target);
+                newprod.setStatus(false);
+                int itemp = 0;
+
+                for (int i = 0; i < DB.getShoppingList().size() && !trobatllista; ++i) {
+                    if (targetlist.equals(DB.getShoppingList().get(i).getName().toLowerCase())) {
+                        trobatllista = true;
+                        itemp = i;
+                        for (int j = 0; j < DB.getShoppingList().get(i).products.size(); ++j) { // La llista es buida perque no entro a la vista.... mai entrara aqui... persistencia? Preguntar PAVEL
+                            if (target.equals(DB.getShoppingList().get(i).products.get(j).getName().toLowerCase())) {
+                                trobatprod = true;
+                            }
+                        }
+                    }
                 }
+                if(!trobatprod){
+                    DB.getShoppingList().get(itemp).products.add(newprod);
+                    shopRecyclerView.getAdapter().notifyDataSetChanged();
+                    shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
+                }
+                else {
+                    speaker.speak("This product already exist", QUEUE_FLUSH, null, "aleix");
+                }
+
+            } else if (message.contains("delete")) {
+                String target = "";
+                Boolean trobat = false;
+                itempdel = 0;
+                Pattern object = Pattern.compile("delete (.*?) list");
+                Matcher matcher = object.matcher(message);
+                while (matcher.find()) {
+                    target = matcher.group(1);
+                }
+
+                for (int i = 0; i < DB.getShoppingList().size(); ++i) {
+                    if (target.equals(DB.getShoppingList().get(i).getName().toLowerCase())) {
+                        trobat = true;
+                        itempdel = i;
+                    }
+                }
+
+                if (trobat) {
+                    waitdelete = true;
+                    speaker.speak("Are you sure that you want to remove " + target + "?", QUEUE_FLUSH, null, "aleix");
+                } else speaker.speak("This list doesn't exists", QUEUE_FLUSH, null, "aleix");
+            }
+        }else{
+            waitdelete = false;
+            if(message.contains("yes")) {
+                DB.getShoppingList().remove(DB.getShoppingList().get(itempdel));
+                shopRecyclerView.getAdapter().notifyDataSetChanged();
+                shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
+            }else if(message.contains("no")){
+                waitdelete = false;
+            }else{
+                waitdelete = true;
+                speaker.speak("I don't understood, could you say it again?", QUEUE_FLUSH, null, "aleix");
             }
         }
 
