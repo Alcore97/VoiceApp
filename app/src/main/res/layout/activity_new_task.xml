@@ -79,15 +79,6 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/b1"
-            android:layout_width="match_parent"
-            android:layout_height="79dp"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/ic_micro" />
-
-        <ImageView
             android:id="@+id/micro"
             android:layout_width="80dp"
             android:onClick="getSpeechInput"
@@ -103,9 +94,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="11dp"
+            android:onClick="showAlertDialogButtonClicked"
+            android:layout_marginRight="45dp"
+            android:layout_marginBottom="15dp"
             android:src="@drawable/ic_speaker" />
+
     </RelativeLayout>
 
 

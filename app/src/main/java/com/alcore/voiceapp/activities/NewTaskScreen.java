@@ -1,5 +1,6 @@
 package com.alcore.voiceapp.activities;
 
+import Database.DB;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -18,9 +19,15 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alcore.voiceapp.R;
+import com.alcore.voiceapp.models.ItemModel;
+import com.alcore.voiceapp.models.TaskModel;
 
+import java.text.BreakIterator;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
@@ -30,6 +37,8 @@ public class NewTaskScreen extends AppCompatActivity implements RecognitionListe
     private TextToSpeech speaker;
     private static final int RECORD_AUDIO_CODE = 100;
     private ImageView micro;
+    private String target;
+
 
 
     @Override
@@ -37,7 +46,7 @@ public class NewTaskScreen extends AppCompatActivity implements RecognitionListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
 
-        final EditText input = findViewById(R.id.text1);
+        micro = findViewById(R.id.micro);
 
         speaker = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -65,6 +74,8 @@ public class NewTaskScreen extends AppCompatActivity implements RecognitionListe
 
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
+        intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, true);
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "com.alcore.voiceapp");
         speechRecognizer.startListening(intent);
     }
@@ -125,6 +136,34 @@ public class NewTaskScreen extends AppCompatActivity implements RecognitionListe
 
     @Override
     public void onResults(Bundle results) {
+        Log.d("NewTaskScreen", "onResults");
+
+        String message = "";
+        ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        for (int i =0; i<data.size(); i++) {
+            message += data.get(i);
+        }
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+        message = message.toLowerCase();
+
+        TextView placeholder = findViewById(R.id.text1);
+        if(placeholder.getText().toString().equals("")) {
+            placeholder.setText(message);
+            target = message;
+            speaker.speak("Are you sure that you want to create " + message + " task?", QUEUE_FLUSH, null, "aleix");
+        }
+
+        if(placeholder.getText().toString() !=  "" && message != target){
+            if(message.contains("yes")){
+                DB.getTaskList().add(new TaskModel(target));
+                finish();
+            }else{
+                placeholder.setText("");
+                speaker.speak("Push the button and say the name of your task", QUEUE_FLUSH, null, "aleix");
+            }
+        }
+
 
     }
 

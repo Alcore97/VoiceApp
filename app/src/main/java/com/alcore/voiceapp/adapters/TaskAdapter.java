@@ -29,6 +29,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TaskModel list = product_list.get(position);
         holder.check.setText(list.name);
+        holder.check.setChecked(list.status);
     }
 
     @Override

@@ -58,9 +58,11 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/b1"
-            android:layout_width="match_parent"
-            android:layout_height="79dp"
+            android:id="@+id/micro"
+            android:layout_width="80dp"
+            android:onClick="getSpeechInput"
+            android:layout_centerHorizontal="true"
+            android:layout_height="80dp"
             android:layout_centerVertical="true"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
@@ -71,20 +73,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:onClick="showAlertDialogButtonClicked"
             android:layout_marginRight="45dp"
             android:layout_marginBottom="15dp"
-            android:onClick="showAlertDialogButtonClicked"
-            android:src="@drawable/ic_info"
-            android:id="@+id/infoicon"/>
+            android:src="@drawable/ic_info" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="11dp"
-            android:src="@drawable/ic_speaker" />
     </RelativeLayout>
 
 
