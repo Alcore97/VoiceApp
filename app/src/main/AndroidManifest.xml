@@ -11,7 +11,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name="com.alcore.voiceapp.Database.Custom"
         android:theme="@style/Theme.VoiceApp">
+        <meta-data android:name="DATABASE" android:value="voiceapp.db" />
+        <meta-data android:name="VERSION" android:value="4" />
+        <meta-data android:name="QUERY_LOG" android:value="true" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.alcore.voiceapp" />
         <activity android:name=".activities.EventScreen"></activity>
         <activity android:name=".activities.NewTaskScreen"></activity>
         <activity android:name=".activities.NewEventScreen"/>
@@ -26,6 +31,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.MainMenu" />
+
     </application>
 
 </manifest>

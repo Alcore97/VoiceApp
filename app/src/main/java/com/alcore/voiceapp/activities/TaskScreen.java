@@ -1,6 +1,6 @@
 package com.alcore.voiceapp.activities;
 
-import Database.DB;
+import com.alcore.voiceapp.Database.DB;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -23,12 +23,10 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alcore.voiceapp.R;
 import com.alcore.voiceapp.adapters.TaskAdapter;
-import com.alcore.voiceapp.models.ProductModel;
 import com.alcore.voiceapp.models.TaskModel;
 
 import java.util.ArrayList;
@@ -48,6 +46,8 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
     private ArrayList<TaskModel> filtertask;
     private View view;
     private static final int RECORD_AUDIO_CODE = 100;
+    private int itempdel;
+    private Boolean waitdelete = false;
 
 
     @Override
@@ -72,7 +72,6 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
 
 
         taskRecyclerView = findViewById(R.id.recyclestask);
-        taskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         taskRecyclerView.setAdapter(new TaskAdapter(DB.getTaskList()));
 
 
@@ -200,21 +199,52 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
         message = message.toLowerCase();
+        if(!waitdelete) {
+            if (message.contains("help")) {
+                showAlertDialogButtonClicked(view);
 
-        if(message.contains("help")){
-            showAlertDialogButtonClicked(view);
-
-        }else if (message.contains("create")){
+            } else if (message.contains("create")) {
                 Intent myIntent = new Intent(TaskScreen.this, NewTaskScreen.class);
                 startActivity(myIntent);
+            } else if (message.contains("filter")) {
+
+                filtertask = (ArrayList<TaskModel>) DB.getTaskList().stream().filter(task -> task.getStatus() == true).collect(Collectors.toList());
+                taskRecyclerView.setAdapter(new TaskAdapter(filtertask));
+
+            } else if (message.contains("delete")) {
+                String task = "";
+                Boolean trobat = false;
+
+                Pattern object = Pattern.compile("delete (.*?) task");
+                Matcher matcher = object.matcher(message);
+                while (matcher.find()) {
+                    task = matcher.group(1);
+                }
+                for (int i = 0; i < DB.getTaskList().size(); ++i) {
+                    if (task.equals(DB.getTaskList().get(i).getName().toLowerCase())) {
+                        trobat = true;
+                        itempdel = i;
+                    }
+                }
+                if (trobat) {
+                    waitdelete = true;
+                    speaker.speak("Are you sure that you want to remove " + task + "?", QUEUE_FLUSH, null, "aleix");
+                } else {
+                    speaker.speak("This product doesn't exists", QUEUE_FLUSH, null, "aleix");
+                }
             }
-        else if(message.contains("filter")){
-
-            filtertask = (ArrayList<TaskModel>) DB.getTaskList().stream().filter(task -> task.getStatus() == true).collect(Collectors.toList());
-
         }
-        else if(message.contains("delete")){
-
+        else {
+            waitdelete = false;
+            if (message.contains("yes")) {
+                DB.getTaskList().remove(DB.getTaskList().get(itempdel));
+                taskRecyclerView.getAdapter().notifyDataSetChanged();
+            } else if (message.contains("no")) {
+                waitdelete = false;
+            } else {
+                waitdelete = true;
+                speaker.speak("I don't understood, could you say it again?", QUEUE_FLUSH, null, "aleix");
+            }
         }
     }
 

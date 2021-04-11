@@ -1,9 +1,11 @@
 package com.alcore.voiceapp.models;
 
+import com.orm.SugarRecord;
+
 import java.io.Serializable;
 import java.util.List;
 
-public class TaskModel implements Serializable {
+public class TaskModel extends SugarRecord implements Serializable {
 
     public String name;
     public boolean status = false;

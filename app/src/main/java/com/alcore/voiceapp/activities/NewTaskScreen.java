@@ -1,6 +1,6 @@
 package com.alcore.voiceapp.activities;
 
-import Database.DB;
+import com.alcore.voiceapp.Database.DB;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -17,16 +17,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alcore.voiceapp.R;
-import com.alcore.voiceapp.models.ItemModel;
 import com.alcore.voiceapp.models.TaskModel;
 
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -154,13 +151,16 @@ public class NewTaskScreen extends AppCompatActivity implements RecognitionListe
             speaker.speak("Are you sure that you want to create " + message + " task?", QUEUE_FLUSH, null, "aleix");
         }
 
-        if(placeholder.getText().toString() !=  "" && message != target){
+        if(!placeholder.getText().toString().equals("") && message != target){
             if(message.contains("yes")){
                 DB.getTaskList().add(new TaskModel(target));
                 finish();
-            }else{
+            }else if(message.contains("no")) {
                 placeholder.setText("");
-                speaker.speak("Push the button and say the name of your task", QUEUE_FLUSH, null, "aleix");
+               //speaker.speak("Push the button and say the name of your task", QUEUE_FLUSH, null, "aleix");
+            }
+            else{
+                speaker.speak("I don't understood, could you say it again?", QUEUE_FLUSH, null, "aleix");
             }
         }
 

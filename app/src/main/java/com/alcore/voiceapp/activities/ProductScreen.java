@@ -1,6 +1,6 @@
 package com.alcore.voiceapp.activities;
 
-import Database.DB;
+import com.alcore.voiceapp.Database.DB;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -13,7 +13,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -51,6 +50,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
     private int listid;
     private int itempdel;
     private Boolean waitdelete = false;
+    private  ItemModel list = null;
     private static final int RECORD_AUDIO_CODE = 100;
 
 
@@ -64,7 +64,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
         String name ="Your " + getIntent().getStringExtra("productlist") + " list";
         itemname.setText(name);
 
-        listid = getIntent().getIntExtra("listID",0);
+        listid = (int) getIntent().getLongExtra("listID",0);
 
 
 
@@ -73,7 +73,14 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
         productRecyclerView = findViewById(R.id.recyclesproduct);
         productRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        productRecyclerView.setAdapter(new ProductAdapter(DB.getShoppingList().get(listid).getProducts()));
+        for(ItemModel model:DB.getShoppingList()){
+            if(model.getId() == listid){
+                list = model;
+                break;
+            }
+        }
+
+        productRecyclerView.setAdapter(new ProductAdapter(list.getProducts()));
 
         speaker = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -209,12 +216,13 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
 
                 prod = message.substring(message.lastIndexOf(" ") + 1);
 
-                for (int i = 0; i < DB.getShoppingList().get(listid).products.size(); ++i) {
-                    if (prod.equals(DB.getShoppingList().get(listid).products.get(i).getName().toLowerCase())) {
+                for (int i = 0; i < list.getProducts().size(); ++i) {
+                    if (prod.equals(list.getProducts().get(i).getName().toLowerCase())) {
                         trobat = true;
-                        DB.getShoppingList().get(listid).products.get(i).setStatus(true);
+                        list.getProducts().get(i).setStatus(true);
+                        list.getProducts().get(i).save();
                         productRecyclerView.getAdapter().notifyDataSetChanged();
-                        productRecyclerView.scrollToPosition(DB.getShoppingList().get(listid).products.size() - 1);
+                        productRecyclerView.scrollToPosition(list.getProducts().size() - 1);
                     }
                 }
                 if (!trobat) {
@@ -229,16 +237,16 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                 while (matcher.find()) {
                     prod = matcher.group(1);
                 }
-                for (int i = 0; i < DB.getShoppingList().get(listid).products.size(); ++i) {
-                    if (prod.equals(DB.getShoppingList().get(listid).products.get(i).getName().toLowerCase())) {
+                for (int i = 0; i < DB.getShoppingList().get(listid).getProducts().size(); ++i) {
+                    if (prod.equals(DB.getShoppingList().get(listid).getProducts().get(i).getName().toLowerCase())) {
                         trobat = true;
                     }
                 }
                 if (!trobat) {
-                    DB.getShoppingList().get(listid).products.add(new ProductModel(prod));
+                    DB.getShoppingList().get(listid).getProducts().add(new ProductModel(prod));
                     // productRecyclerView.setAdapter(new ProductAdapter(list));
                     productRecyclerView.getAdapter().notifyDataSetChanged();
-                    productRecyclerView.scrollToPosition(DB.getShoppingList().get(listid).products.size() - 1);
+                    productRecyclerView.scrollToPosition(DB.getShoppingList().get(listid).getProducts().size() - 1);
                 } else {
                     speaker.speak("This product already exist", QUEUE_FLUSH, null, "aleix");
                 }
@@ -248,8 +256,8 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                 itempdel = 0;
                 target = message.substring(message.lastIndexOf(" ") + 1);
 
-                for (int i = 0; i < DB.getShoppingList().get(listid).products.size(); ++i) {
-                    if (target.equals(DB.getShoppingList().get(listid).products.get(i).getName().toLowerCase())) {
+                for (int i = 0; i < DB.getShoppingList().get(listid).getProducts().size(); ++i) {
+                    if (target.equals(DB.getShoppingList().get(listid).getProducts().get(i).getName().toLowerCase())) {
                         trobat = true;
                         itempdel = i;
                     }
@@ -264,7 +272,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
         }else{
             waitdelete = false;
             if(message.contains("yes")) {
-                DB.getShoppingList().get(listid).products.remove(DB.getShoppingList().get(listid).products.get(itempdel));
+                DB.getShoppingList().get(listid).getProducts().remove(DB.getShoppingList().get(listid).getProducts().get(itempdel));
                 productRecyclerView.getAdapter().notifyDataSetChanged();
             }else if(message.contains("no")){
                 waitdelete = false;

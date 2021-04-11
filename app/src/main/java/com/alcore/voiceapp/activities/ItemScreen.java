@@ -1,6 +1,6 @@
 package com.alcore.voiceapp.activities;
 
-import Database.DB;
+import com.alcore.voiceapp.Database.DB;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +14,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -29,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alcore.voiceapp.adapters.ItemAdapter;
-import com.alcore.voiceapp.adapters.ProductAdapter;
 import com.alcore.voiceapp.models.ItemModel;
 import com.alcore.voiceapp.R;
 import com.alcore.voiceapp.models.ProductModel;
@@ -133,7 +131,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
         ItemModel imodel = DB.getShoppingList().get(position);
         Intent myIntent = new Intent(ItemScreen.this, ProductScreen.class);
         myIntent.putExtra("productlist", imodel.name);
-        myIntent.putExtra("listID", position);
+        myIntent.putExtra("listID", imodel.getId());
         startActivity(myIntent);
     }
 
@@ -267,7 +265,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
 
                 Intent myIntent = new Intent(ItemScreen.this, ProductScreen.class);
                 myIntent.putExtra("productlist", DB.getShoppingList().get(itemp).getName());
-                myIntent.putExtra("listID", itemp);
+                myIntent.putExtra("listID", DB.getShoppingList().get(itemp).getId());
                 startActivity(myIntent);
 
             } else if (message.contains("put")) {
@@ -296,15 +294,15 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                     if (targetlist.equals(DB.getShoppingList().get(i).getName().toLowerCase())) {
                         trobatllista = true;
                         itemp = i;
-                        for (int j = 0; j < DB.getShoppingList().get(i).products.size(); ++j) { // La llista es buida perque no entro a la vista.... mai entrara aqui... persistencia? Preguntar PAVEL
-                            if (target.equals(DB.getShoppingList().get(i).products.get(j).getName().toLowerCase())) {
+                        for (int j = 0; j < DB.getShoppingList().get(i).getProducts().size(); ++j) { // La llista es buida perque no entro a la vista.... mai entrara aqui... persistencia? Preguntar PAVEL
+                            if (target.equals(DB.getShoppingList().get(i).getProducts().get(j).getName().toLowerCase())) {
                                 trobatprod = true;
                             }
                         }
                     }
                 }
                 if(!trobatprod){
-                    DB.getShoppingList().get(itemp).products.add(newprod);
+                    DB.getShoppingList().get(itemp).getProducts().add(newprod);
                     shopRecyclerView.getAdapter().notifyDataSetChanged();
                     shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
                 }
