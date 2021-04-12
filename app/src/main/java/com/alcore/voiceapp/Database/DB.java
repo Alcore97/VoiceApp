@@ -10,7 +10,7 @@ public class DB  {
 
     private DB(){}
 
-    private static ArrayList<ItemModel> listitems = null;
+    private static ArrayList<ItemModel> listitems;
     private static ArrayList<TaskModel> listproducts = null;
 
 

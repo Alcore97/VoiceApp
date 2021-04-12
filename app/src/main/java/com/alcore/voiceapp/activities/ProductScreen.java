@@ -49,6 +49,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
     private View view;
     private int listid;
     private int itempdel;
+    private String targetdel;
     private Boolean waitdelete = false;
     private  ItemModel list = null;
     private static final int RECORD_AUDIO_CODE = 100;
@@ -237,16 +238,19 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                 while (matcher.find()) {
                     prod = matcher.group(1);
                 }
-                for (int i = 0; i < DB.getShoppingList().get(listid).getProducts().size(); ++i) {
-                    if (prod.equals(DB.getShoppingList().get(listid).getProducts().get(i).getName().toLowerCase())) {
+                for (int i = 0; i < list.getProducts().size(); ++i) {
+                    if (prod.equals(list.getProducts().get(i).getName().toLowerCase())) {
                         trobat = true;
                     }
                 }
-                if (!trobat) {
-                    DB.getShoppingList().get(listid).getProducts().add(new ProductModel(prod));
-                    // productRecyclerView.setAdapter(new ProductAdapter(list));
+                if (!trobat && prod != "") {
+                    ProductModel product = new ProductModel(prod);
+                    list.getProducts().add(product);
+                    list.save();
+                    product.save();
+                    productRecyclerView.setAdapter(new ProductAdapter(list.getProducts()));
                     productRecyclerView.getAdapter().notifyDataSetChanged();
-                    productRecyclerView.scrollToPosition(DB.getShoppingList().get(listid).getProducts().size() - 1);
+                    productRecyclerView.scrollToPosition(list.getProducts().size() - 1);
                 } else {
                     speaker.speak("This product already exist", QUEUE_FLUSH, null, "aleix");
                 }
@@ -256,10 +260,11 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                 itempdel = 0;
                 target = message.substring(message.lastIndexOf(" ") + 1);
 
-                for (int i = 0; i < DB.getShoppingList().get(listid).getProducts().size(); ++i) {
-                    if (target.equals(DB.getShoppingList().get(listid).getProducts().get(i).getName().toLowerCase())) {
+                for (int i = 0; i < list.getProducts().size(); ++i) {
+                    if (target.equals(list.getProducts().get(i).getName().toLowerCase())) {
                         trobat = true;
                         itempdel = i;
+                        targetdel = target;
                     }
                 }
                 if(trobat){
@@ -269,11 +274,16 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                     speaker.speak("This product doesn't exists", QUEUE_FLUSH, null, "aleix");
                 }
             }
+            else{
+                speaker.speak("I doesn't undestood, could you say it again?", QUEUE_FLUSH, null, "aleix");
+            }
         }else{
             waitdelete = false;
             if(message.contains("yes")) {
-                DB.getShoppingList().get(listid).getProducts().remove(DB.getShoppingList().get(listid).getProducts().get(itempdel));
+                list.getProducts().get(itempdel).delete();
+                list.getProducts().remove(list.getProducts().get(itempdel));
                 productRecyclerView.getAdapter().notifyDataSetChanged();
+                speaker.speak("Succesfully deleted" + targetdel, QUEUE_FLUSH, null, "aleix");
             }else if(message.contains("no")){
                 waitdelete = false;
             }else{

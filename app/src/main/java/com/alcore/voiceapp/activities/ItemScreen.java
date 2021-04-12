@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -52,6 +53,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
     private View view;
     private int itemp;
     private int itempdel;
+    private String targetdel;
     private Boolean waitdelete = false;
 
     @Override
@@ -243,10 +245,19 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                 showAlertDialogButtonClicked(view);
             } else if (message.contains("create")) {
                 String newlist = "";
-                newlist = message.substring(message.lastIndexOf(" ") + 1);
-                DB.getShoppingList().add(new ItemModel(newlist));
-                shopRecyclerView.getAdapter().notifyDataSetChanged();
-                shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
+
+                Pattern object = Pattern.compile("create (.*?) list");
+                Matcher matcher = object.matcher(message);
+                while (matcher.find()) {
+                    newlist = matcher.group(1);
+                }
+                if(newlist != "") {
+                    ItemModel list = new ItemModel(newlist);
+                    DB.getShoppingList().add(list);
+                    list.save();
+                    shopRecyclerView.getAdapter().notifyDataSetChanged();
+                    shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
+                }
             } else if (message.contains("show")) {
                 String target = "";
                 Boolean ended = false;
@@ -301,17 +312,25 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                         }
                     }
                 }
-                if(!trobatprod){
+                if(!trobatprod && target != "" && targetlist != ""){
                     DB.getShoppingList().get(itemp).getProducts().add(newprod);
+                    DB.getShoppingList().get(itemp).save();
+                    newprod.save();
                     shopRecyclerView.getAdapter().notifyDataSetChanged();
                     shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
+                    speaker.speak("Succesfully added" + newprod.getName(), QUEUE_FLUSH, null, "aleix");
+                }else if(!trobatllista && targetlist != ""){
+                    speaker.speak("This list doesn't exists ", QUEUE_FLUSH, null, "aleix");
                 }
-                else {
-                    speaker.speak("This product already exist", QUEUE_FLUSH, null, "aleix");
+                else if(trobatprod){
+                    speaker.speak("This product already exist ", QUEUE_FLUSH, null, "aleix");
+                }else{
+                    speaker.speak("Say it again", QUEUE_FLUSH, null, "aleix");
                 }
 
             } else if (message.contains("delete")) {
                 String target = "";
+
                 Boolean trobat = false;
                 itempdel = 0;
                 Pattern object = Pattern.compile("delete (.*?) list");
@@ -329,15 +348,18 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
 
                 if (trobat) {
                     waitdelete = true;
+                    targetdel = target;
                     speaker.speak("Are you sure that you want to remove " + target + "?", QUEUE_FLUSH, null, "aleix");
                 } else speaker.speak("This list doesn't exists", QUEUE_FLUSH, null, "aleix");
             }
         }else{
             waitdelete = false;
             if(message.contains("yes")) {
+                DB.getShoppingList().get(itempdel).delete();
                 DB.getShoppingList().remove(DB.getShoppingList().get(itempdel));
                 shopRecyclerView.getAdapter().notifyDataSetChanged();
                 shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
+                speaker.speak("Succesfully deleted" + targetdel, QUEUE_FLUSH, null, "aleix");
             }else if(message.contains("no")){
                 waitdelete = false;
             }else{
