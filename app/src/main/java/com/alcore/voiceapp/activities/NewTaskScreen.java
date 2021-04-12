@@ -153,7 +153,9 @@ public class NewTaskScreen extends AppCompatActivity implements RecognitionListe
 
         if(!placeholder.getText().toString().equals("") && message != target){
             if(message.contains("yes")){
-                DB.getTaskList().add(new TaskModel(target));
+                TaskModel newtask = new TaskModel(target);
+                DB.getTaskList().add(newtask);
+                newtask.save();
                 finish();
             }else if(message.contains("no")) {
                 placeholder.setText("");

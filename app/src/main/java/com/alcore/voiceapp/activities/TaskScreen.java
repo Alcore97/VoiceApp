@@ -47,6 +47,7 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
     private View view;
     private static final int RECORD_AUDIO_CODE = 100;
     private int itempdel;
+    private String targetdel;
     private Boolean waitdelete = false;
 
 
@@ -211,7 +212,26 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
                 filtertask = (ArrayList<TaskModel>) DB.getTaskList().stream().filter(task -> task.getStatus() == true).collect(Collectors.toList());
                 taskRecyclerView.setAdapter(new TaskAdapter(filtertask));
 
-            } else if (message.contains("delete")) {
+            }else if (message.contains("mark") || message.contains("marc")) {
+                String task = "";
+                Boolean trobat = false;
+
+                task = message.substring(message.lastIndexOf(" ") + 1);
+
+                for (int i = 0; i < DB.getTaskList().size(); ++i) {
+                    if (task.equals(DB.getTaskList().get(i).getName().toLowerCase())) {
+                        trobat = true;
+                        DB.getTaskList().get(i).setStatus(true);
+                        DB.getTaskList().get(i).save();
+                        taskRecyclerView.getAdapter().notifyDataSetChanged();
+                        taskRecyclerView.scrollToPosition(DB.getTaskList().size() - 1);
+                    }
+                }
+                if (!trobat) {
+                    speaker.speak("This task doesn't exists", QUEUE_FLUSH, null, "aleix");
+                }
+            }
+            else if (message.contains("delete")) {
                 String task = "";
                 Boolean trobat = false;
 
@@ -224,6 +244,7 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
                     if (task.equals(DB.getTaskList().get(i).getName().toLowerCase())) {
                         trobat = true;
                         itempdel = i;
+                        targetdel = task;
                     }
                 }
                 if (trobat) {
@@ -237,8 +258,10 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
         else {
             waitdelete = false;
             if (message.contains("yes")) {
+                DB.getTaskList().get(itempdel).delete();
                 DB.getTaskList().remove(DB.getTaskList().get(itempdel));
                 taskRecyclerView.getAdapter().notifyDataSetChanged();
+                speaker.speak("Succesfully deleted" + targetdel, QUEUE_FLUSH, null, "aleix");
             } else if (message.contains("no")) {
                 waitdelete = false;
             } else {

@@ -11,7 +11,7 @@ public class DB  {
     private DB(){}
 
     private static ArrayList<ItemModel> listitems;
-    private static ArrayList<TaskModel> listproducts = null;
+    private static ArrayList<TaskModel> listproducts;
 
 
 
@@ -29,18 +29,16 @@ public class DB  {
         return listitems;
     }
     public static  ArrayList<TaskModel> getTaskList(){
-        /*if(list2 == null){
-            list2 = new ArrayList<>();
-            list2.add(new TaskModel("Run"));
-            list2.add(new TaskModel("Gym"));
-            list2.add(new TaskModel("Study"));
-            list2.add(new TaskModel("Meet"));
-            list2.add(new TaskModel("Play"));
-            list2.add(new TaskModel("Ask a friend"));
-            list2.add(new TaskModel("Go to the beach"));
+        if(listproducts == null){
+           /* TaskModel.deleteAll(ItemModel.class);
+
+            TaskModel lista1 = new TaskModel("Estudiar");
+            lista1.save();*/
+
+            listproducts = (ArrayList<TaskModel>) TaskModel.listAll(TaskModel.class);
+
         }
-        return list2;*/
-        return new ArrayList<>();
+        return listproducts;
     }
 
 

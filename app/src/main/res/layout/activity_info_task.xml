@@ -62,13 +62,50 @@
             android:layout_marginTop="8dp"
             />
     </RelativeLayout>
-
     <RelativeLayout
         android:layout_below="@+id/l2"
+        android:id="@+id/l3"
+        android:layout_width="350dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/background_veige">
+        <ImageView
+            android:id="@+id/i2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_speak"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="8dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/i2"
+            android:text="Aisha,mark X done"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/AishaSpeak"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="20dp"
+            />
+        <ImageView
+            android:id="@+id/i3.5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_pencil"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="8dp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_below="@+id/l3"
         android:id="@+id/l4"
         android:layout_width="350dp"
         android:layout_height="40dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/background_veige">
         <ImageView
@@ -91,7 +128,7 @@
             android:layout_marginLeft="20dp"
             />
         <ImageView
-            android:id="@+id/i3.5"
+            android:id="@+id/i4.5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -105,7 +142,7 @@
         android:id="@+id/l5"
         android:layout_width="350dp"
         android:layout_height="40dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/background_veige">
         <ImageView
@@ -128,7 +165,7 @@
             android:layout_marginLeft="20dp"
             />
         <ImageView
-            android:id="@+id/i4.5"
+            android:id="@+id/i5.5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
