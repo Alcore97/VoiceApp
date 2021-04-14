@@ -1,13 +1,17 @@
 package com.alcore.voiceapp.activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -22,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.alcore.voiceapp.R;
+import com.orm.SugarRecord;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -32,7 +37,12 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
 
     private static final int RECORD_AUDIO_CODE = 100;
     private ImageView micro;
+    private ImageView microalert;
     private TextToSpeech speaker;
+    private View view;
+    public Boolean ENABLED =false;
+    private ImageView arrowon;
+    private ImageView arrowoff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +51,11 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
 
         micro = findViewById(R.id.micro);
 
+
         final RelativeLayout ButtonToShop = findViewById(R.id.l2);
         final RelativeLayout ButtonToToDo = findViewById(R.id.l4);
         final RelativeLayout ButtonToEvent = findViewById(R.id.l6);
+        final ImageView ButtonToSet = findViewById(R.id.setting);
 
         speaker = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -60,6 +72,7 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
 
             }
         });
+
 
 
 
@@ -87,15 +100,61 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
                 startActivity(myIntent);
             }
         });
+        ButtonToSet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertDialogButtonClicked(view, ENABLED);
+            }
+        });
     }
+
+    public void showAlertDialogButtonClicked(View view, Boolean ENABLED) {
+        // create an alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.activity_settings, null);
+        builder.setView(customLayout);
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+
+
+
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface d) {
+                RelativeLayout backbut = dialog.findViewById(R.id.backbutton);
+                backbut.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+        dialog.show();
+        arrowoff = (ImageView) dialog.findViewById(R.id.arrowoff);
+        arrowon = (ImageView) dialog.findViewById(R.id.arrowon);
+        microalert = (ImageView) dialog.findViewById(R.id.microalert);
+
+        if(ENABLED == false){
+            arrowoff.setColorFilter(Color.argb(255,0,0,0));
+            arrowon.setColorFilter(Color.argb(255,126,120, 210));
+        }
+        if(ENABLED == true){
+            arrowon.setColorFilter(Color.argb(255,0,0,0));
+            arrowoff.setColorFilter(Color.argb(255,126,120, 210));
+        }
+    }
+
 
     public void Explaining(View view){
         speaker.speak("Hi, i'm Aisha, your voice assistant." +
                 "This is Main Menu Screen, if you want to go to your Shopping List, you can say: Aisha, go to my Shopping List." +
                 "If you want to go to your To-Do List, you can say: Aisha, go to my To-Do List." +
                 "If you want to go to your Event List, you can say: Aisha, go to my Event List." +
-                "If you don't really know want to do in any screen, you can say: Help" +
-                "If you want to modify sound options, say: Settings" +
+                "If you don't really know want to do in any screen, you can say: Help." +
+                "If you want to modify sound options, say: Settings." +
                 "Every time that you want to say something, push microphone button." +
                 "Enjoy.", QUEUE_FLUSH, null, "aleix");
     }
@@ -187,6 +246,7 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             );
             anim_waves.setDuration(50);
             micro.startAnimation(anim_waves);
+            microalert.startAnimation(anim_waves);
         }
 
     }
@@ -228,6 +288,23 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
         }else if(message.contains("event")){
             Intent myIntent = new Intent(MainMenu.this, EventScreen.class);
             startActivity(myIntent);
+        }else if(message.contains("settings") || message.contains("setings")) {
+            showAlertDialogButtonClicked(view, ENABLED);
+        }else if(message.contains("enable") && !ENABLED){
+            ENABLED = true;
+            arrowon.setColorFilter(Color.argb(255,0,0,0));
+            arrowoff.setColorFilter(Color.argb(255,126,120, 210));
+        }else if(message.contains("enable") && ENABLED){
+            speaker.speak("Sound already enabled", QUEUE_FLUSH, null, "aleix");
+
+        }else if(message.contains("disable") && !ENABLED){
+            speaker.speak("Sound already disabled", QUEUE_FLUSH, null, "aleix");
+        }else if(message.contains("disable") && ENABLED){
+            ENABLED = false;
+            arrowoff.setColorFilter(Color.argb(255,0,0,0));
+            arrowon.setColorFilter(Color.argb(255,126,120, 210));
+        }else{
+            speaker.speak("I don't undestood you, could you say it again?", QUEUE_FLUSH, null, "aleix");
         }
 
 

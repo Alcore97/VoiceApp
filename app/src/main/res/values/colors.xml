@@ -11,4 +11,6 @@
     <color name="speak">#EEE0CB</color>
     <color name="scatter">#8AAFB0</color>
     <color name="infoback">#7E78D2</color>
+    <color name="setting">#CFD8DC</color>
+    <color name="deactiavated">#555555</color>
 </resources>
