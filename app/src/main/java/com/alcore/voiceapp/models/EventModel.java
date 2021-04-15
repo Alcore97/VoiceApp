@@ -1,13 +1,16 @@
 package com.alcore.voiceapp.models;
 
+import com.orm.SugarRecord;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class EventModel implements Serializable {
+public class EventModel extends SugarRecord implements Serializable {
 
-    public int id;
     public String name;
-    public String date;
+    public Date date;
+
+
 
     public EventModel(){
 
@@ -17,9 +20,9 @@ public class EventModel implements Serializable {
         this.name = name;
     }
 
-    public EventModel(String name, String date,int id){
+    public EventModel(String name, Date date){
         this.name = name;
         this.date = date;
-        this.id = id;
     }
+
 }

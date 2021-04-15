@@ -167,13 +167,25 @@ public class NewTaskScreen extends AppCompatActivity implements RecognitionListe
 
         if(!placeholder.getText().toString().equals("") && message != target){
             if(message.contains("yes")){
-                TaskModel newtask = new TaskModel(target);
-                DB.getTaskList().add(newtask);
-                newtask.save();
-                if (ENABLED) {
-                    customsound(NewTaskScreen.this);
+                Boolean trobat = false;
+
+                for (int i = 0; i < DB.getTaskList().size(); ++i) {
+                    if (target.equals(DB.getTaskList().get(i).getName().toLowerCase())) {
+                        trobat = true;
+                    }
                 }
-                finish();
+                if(trobat){
+                    speaker.speak("This task already exists", QUEUE_FLUSH, null, "aleix");
+                }
+                else{
+                    TaskModel newtask = new TaskModel(target);
+                    DB.getTaskList().add(newtask);
+                    newtask.save();
+                    if (ENABLED) {
+                        customsound(NewTaskScreen.this);
+                    }
+                    finish();
+                }
             }else if(message.contains("no")) {
                 placeholder.setText("");
                //speaker.speak("Push the button and say the name of your task", QUEUE_FLUSH, null, "aleix");

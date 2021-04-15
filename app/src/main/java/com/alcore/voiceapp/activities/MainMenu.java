@@ -38,6 +38,8 @@ import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 public class MainMenu extends AppCompatActivity implements RecognitionListener {
 
     private static final int RECORD_AUDIO_CODE = 100;
+    private static final int READ_CALENDAR_CODE = 200;
+    private static final int WRITE_CALENDAR_CODE = 300;
     private ImageView micro;
     private ImageView microalert;
     private TextToSpeech speaker;
@@ -53,6 +55,10 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
         setContentView(R.layout.activity_main);
 
         micro = findViewById(R.id.micro);
+
+        checkPermission(Manifest.permission.READ_CALENDAR, READ_CALENDAR_CODE);
+        checkPermission(Manifest.permission.WRITE_CALENDAR, WRITE_CALENDAR_CODE);
+
 
         cargarPreferencias();
 
@@ -166,13 +172,8 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
 
 
     public void Explaining(View view){
-        speaker.speak("Hi, i'm Aisha, your voice assistant." +
-                "This is Main Menu Screen, if you want to go to your Shopping List, you can say: Aisha, go to my Shopping List." +
-                "If you want to go to your To-Do List, you can say: Aisha, go to my To-Do List." +
-                "If you want to go to your Event List, you can say: Aisha, go to my Event List." +
-                "If you don't really know want to do in any screen, you can say: Help." +
-                "If you want to modify sound options, say: Settings." +
-                "Every time that you want to say something, push microphone button." +
+        speaker.speak("Hi, i'm Aisha, your voice assistant." + "Every time that you want to say something, push microphone button." +
+                "If you don't really know want to do in any screen, you can say: Help." + "If you want to modify sound options, say: Settings." +
                 "Enjoy.", QUEUE_FLUSH, null, "aleix");
     }
 
@@ -310,6 +311,8 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             Intent myIntent = new Intent(MainMenu.this, EventScreen.class);
             myIntent.putExtra("isEnable", ENABLED);
             startActivity(myIntent);
+        }else if(message.contains("Help")){
+            Explaining(view);
         }else if(message.contains("settings") || message.contains("setings")) {
             showAlertDialogButtonClicked(view, ENABLED);
         }else if(message.contains("enable") && !ENABLED){

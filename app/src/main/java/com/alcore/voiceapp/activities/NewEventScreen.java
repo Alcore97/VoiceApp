@@ -24,8 +24,6 @@ public class NewEventScreen extends AppCompatActivity {
         TextName.setText(Text1);
         String Text2 = getIntent().getStringExtra("eventdate");
         TextDate.setText(Text2);
-        String Text3 = getIntent().getStringExtra("eventhour");
-        TextHour.setText(Text3);
 
     }
 }

@@ -216,6 +216,28 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/speaker"
+            android:background="@drawable/background_setting"
+            android:layout_marginRight="10dp"
+            android:paddingHorizontal="5dp"
+            android:textColor="@color/black"
+            android:text="Say ''Help''"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_above="@+id/setting"
+            android:background="@drawable/background_setting"
+            android:layout_marginRight="10dp"
+            android:paddingHorizontal="5dp"
+            android:textColor="@color/black"
+            android:text="Say ''Settings''"
+            />
 
         <ImageView
             android:id="@+id/micro"
@@ -240,6 +262,7 @@
             android:id="@+id/infoicon"/>
 
         <ImageView
+            android:id="@+id/speaker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -253,7 +276,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="11dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="30dp"
             android:src="@drawable/ic_setting" />
     </RelativeLayout>
 

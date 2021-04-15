@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.alcore.voiceapp.R;
 import com.alcore.voiceapp.models.EventModel;
 
+import org.joda.time.DateTime;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -33,7 +35,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         EventModel list = product_list.get(position);
         holder.nameevent.setText(list.name);
-        holder.date.setText(list.date + list.hour);
+
+        DateTime aux = new DateTime(list.date);
+        holder.date.setText(aux.toString("dd MMM YYYY HH:mm"));
     }
 
     @Override

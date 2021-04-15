@@ -52,7 +52,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Task Name Field"
+            android:text="Event Name Field"
             android:textColor="@color/black"
             android:textSize="@dimen/SplashMain">
 

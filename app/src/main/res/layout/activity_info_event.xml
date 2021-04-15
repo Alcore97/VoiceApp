@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/i2"
-            android:text="Aisha, edit task ID"
+            android:text="Aisha, edit event ID"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/AishaSpeak"
