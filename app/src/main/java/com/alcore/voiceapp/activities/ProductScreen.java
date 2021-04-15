@@ -228,7 +228,16 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                 String prod = "";
                 Boolean trobat = false;
 
-                prod = message.substring(message.lastIndexOf(" ") + 1);
+                int position = message.lastIndexOf("mark");
+                if(position < 0){
+                    position = message.lastIndexOf("marc");
+                }
+
+                if(message.length() >=5) {
+                    prod = message.substring(position + 5);
+                }else{
+                    speaker.speak("This product doesn't exists", QUEUE_FLUSH, null, "aleix");
+                }
 
                 for (int i = 0; i < list.getProducts().size(); ++i) {
                     if (prod.equals(list.getProducts().get(i).getName().toLowerCase())) {
@@ -242,21 +251,27 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                 if (!trobat) {
                     speaker.speak("This product doesn't exists", QUEUE_FLUSH, null, "aleix");
                 }
-            } else if (message.contains("insert")) {
+            } else if (message.contains("insert") || message.contains("incert")) {
                 String prod = "";
                 Boolean trobat = false;
 
-                Pattern object = Pattern.compile("insert (.*?) item");
-                Matcher matcher = object.matcher(message);
-                while (matcher.find()) {
-                    prod = matcher.group(1);
+                int position = message.lastIndexOf("insert");
+                if(position < 0){
+                    position = message.lastIndexOf("incert");
                 }
+                if(message.length() >=7) {
+                    prod = message.substring(position + 7);
+                }else{
+                    speaker.speak("I dont undestood, could you say it again?", QUEUE_FLUSH, null, "aleix");
+                }
+
+
                 for (int i = 0; i < list.getProducts().size(); ++i) {
                     if (prod.equals(list.getProducts().get(i).getName().toLowerCase())) {
                         trobat = true;
                     }
                 }
-                if (!trobat && prod != "") {
+                if (!trobat && !prod.equals("")) {
                     ProductModel product = new ProductModel(prod);
                     list.getProducts().add(product);
                     list.save();
@@ -267,14 +282,19 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                     if (ENABLED) {
                         customsound(ProductScreen.this);
                     }
-                } else {
+                } else if(trobat){
                     speaker.speak("This product already exist", QUEUE_FLUSH, null, "aleix");
                 }
             } else if (message.contains("delete")) {
                 String target = "";
                 Boolean trobat = false;
                 itempdel = 0;
-                target = message.substring(message.lastIndexOf(" ") + 1);
+                if(message.length() >= 7) {
+                    target = message.substring(message.lastIndexOf("delete") + 1 + "delete".length());
+                }
+                else{
+                    speaker.speak("This product doesn't exists", QUEUE_FLUSH, null, "aleix");
+                }
 
                 for (int i = 0; i < list.getProducts().size(); ++i) {
                     if (target.equals(list.getProducts().get(i).getName().toLowerCase())) {
@@ -295,7 +315,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
             }
         }else{
             waitdelete = false;
-            if(message.contains("yes")) {
+            if(message.contains("yes") || message.contains("ies")) {
                 list.getProducts().get(itempdel).delete();
                 list.getProducts().remove(list.getProducts().get(itempdel));
                 productRecyclerView.getAdapter().notifyDataSetChanged();

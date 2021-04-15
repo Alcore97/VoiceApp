@@ -311,7 +311,7 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             Intent myIntent = new Intent(MainMenu.this, EventScreen.class);
             myIntent.putExtra("isEnable", ENABLED);
             startActivity(myIntent);
-        }else if(message.contains("Help")){
+        }else if(message.contains("help")){
             Explaining(view);
         }else if(message.contains("settings") || message.contains("setings")) {
             showAlertDialogButtonClicked(view, ENABLED);

@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/i1"
-            android:text="Aisha, insert X item"
+            android:text="Aisha, insert X"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/AishaSpeak"

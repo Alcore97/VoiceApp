@@ -266,10 +266,16 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
 
                 Pattern object = Pattern.compile("create (.*?) list");
                 Matcher matcher = object.matcher(message);
+                if(matcher.matches()){
+                    newlist = matcher.group(matcher.groupCount()).trim();
+                }
+
+                /*Pattern object = Pattern.compile("create (.*?) list");
+                Matcher matcher = object.matcher(message);
                 while (matcher.find()) {
                     newlist = matcher.group(1);
-                }
-                if(newlist != "") {
+                }*/
+                if(!newlist.equals("")) {
                     for (int i = 0; i < DB.getShoppingList().size(); ++i) {
                         if(newlist.equals(DB.getShoppingList().get(i).getName().toLowerCase())) {
                             trobat = true;
@@ -287,20 +293,19 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                         }
                     }
                     else{
-                        speaker.speak("This list already exist" + newlist, QUEUE_FLUSH, null, "aleix");
+                        speaker.speak("This list already exist" , QUEUE_FLUSH, null, "aleix");
                     }
                 }
                 else{
-                    speaker.speak("I don't undestood you, could you say it again?" + newlist, QUEUE_FLUSH, null, "aleix");
+                    speaker.speak("I don't undestood you, could you say it again?", QUEUE_FLUSH, null, "aleix");
                 }
             } else if (message.contains("show")) {
                 String target = "";
                 Boolean ended = false;
-                itemp = 0;
                 Pattern object = Pattern.compile("show (.*?) list");
                 Matcher matcher = object.matcher(message);
-                while (matcher.find()) {
-                    target = matcher.group(1);
+                if(matcher.matches()) {
+                    target = matcher.group(matcher.groupCount()).trim();
                 }
                 for (int i = 0; i < DB.getShoppingList().size() && !ended; ++i) {
                     if (target.equals(DB.getShoppingList().get(i).getName().toLowerCase())) {
@@ -308,12 +313,19 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                         itemp = i;
                     }
                 }
+                if(!target.equals("") && ended) {
 
-                Intent myIntent = new Intent(ItemScreen.this, ProductScreen.class);
-                myIntent.putExtra("productlist", DB.getShoppingList().get(itemp).getName());
-                myIntent.putExtra("listID", DB.getShoppingList().get(itemp).getId());
-                myIntent.putExtra("isEnable",ENABLED);
-                startActivity(myIntent);
+                    Intent myIntent = new Intent(ItemScreen.this, ProductScreen.class);
+                    myIntent.putExtra("productlist", DB.getShoppingList().get(itemp).getName());
+                    myIntent.putExtra("listID", DB.getShoppingList().get(itemp).getId());
+                    myIntent.putExtra("isEnable", ENABLED);
+                    startActivity(myIntent);
+                }
+                else if(target.equals("")){
+                    speaker.speak("I don't undestood you, could you say it again?" , QUEUE_FLUSH, null, "aleix");
+                } else if(!target.equals("") && !ended){
+                    speaker.speak("This list doesn't exists", QUEUE_FLUSH, null, "aleix");
+                }
 
             } else if (message.contains("put")) {
                 String targetlist = "";
@@ -321,16 +333,18 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
 
                 Boolean trobatllista = false;
                 Boolean trobatprod = false;
-                Pattern object = Pattern.compile("put (.*?) to");
-                Pattern objectlist = Pattern.compile("to (.*?) list");
+                Pattern object = Pattern.compile("put (.*?) (to|tu)");
                 Matcher matcher = object.matcher(message);
-                Matcher matcherlist = objectlist.matcher(message);
                 while (matcher.find()) {
                     target = matcher.group(1);
                 }
+
+                Pattern objectlist = Pattern.compile("(to|tu) (.*?) list");
+                Matcher matcherlist = objectlist.matcher(message);
                 while (matcherlist.find()) {
-                    targetlist = matcherlist.group(1);
+                    targetlist = matcherlist.group(2);
                 }
+
 
                 ProductModel newprod = new ProductModel();
                 newprod.setName(target);
@@ -348,13 +362,13 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                         }
                     }
                 }
-                if(!trobatprod && target != "" && targetlist != ""){
+                if(!trobatprod && trobatllista && !target.equals("") && !targetlist.equals("")){
                     DB.getShoppingList().get(itemp).getProducts().add(newprod);
                     DB.getShoppingList().get(itemp).save();
                     newprod.save();
                     shopRecyclerView.getAdapter().notifyDataSetChanged();
                     shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
-                    speaker.speak("Succesfully added" + newprod.getName(), QUEUE_FLUSH, null, "aleix");
+                    speaker.speak("Succesfully added" + newprod.getName() + "to" +targetlist, QUEUE_FLUSH, null, "aleix");
                     if (ENABLED) {
                         customsound(ItemScreen.this);
                     }
@@ -363,7 +377,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                     speaker.speak("This list doesn't exists ", QUEUE_FLUSH, null, "aleix");
                 }
                 else if(trobatprod){
-                    speaker.speak("This product already exist ", QUEUE_FLUSH, null, "aleix");
+                    speaker.speak("This product already exist in" + targetlist, QUEUE_FLUSH, null, "aleix");
                 }else{
                     speaker.speak("Say it again", QUEUE_FLUSH, null, "aleix");
                 }
@@ -375,8 +389,8 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                 itempdel = 0;
                 Pattern object = Pattern.compile("delete (.*?) list");
                 Matcher matcher = object.matcher(message);
-                while (matcher.find()) {
-                    target = matcher.group(1);
+                if(matcher.matches()) {
+                    target = matcher.group(matcher.groupCount()).trim();
                 }
 
                 for (int i = 0; i < DB.getShoppingList().size(); ++i) {
@@ -386,7 +400,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                     }
                 }
 
-                if (trobat) {
+                if (trobat && !target.equals("")) {
                     waitdelete = true;
                     targetdel = target;
                     speaker.speak("Are you sure that you want to remove " + target + "?", QUEUE_FLUSH, null, "aleix");
@@ -397,7 +411,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
             }
         }else{
             waitdelete = false;
-            if(message.contains("yes")) {
+            if(message.contains("yes") || message.contains("ies")) {
                 DB.getShoppingList().get(itempdel).delete();
                 DB.getShoppingList().remove(DB.getShoppingList().get(itempdel));
                 shopRecyclerView.getAdapter().notifyDataSetChanged();

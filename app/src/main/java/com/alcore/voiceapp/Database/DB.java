@@ -43,7 +43,7 @@ public class DB  {
     }
     public static  ArrayList<TaskModel> getTaskList(){
         if(listproducts == null){
-           /* TaskModel.deleteAll(ItemModel.class);
+            /*TaskModel.deleteAll(TaskModel.class);
 
             TaskModel lista1 = new TaskModel("Estudiar");
             lista1.save();*/

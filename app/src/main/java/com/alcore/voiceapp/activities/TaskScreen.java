@@ -57,6 +57,7 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
     @Override
     protected void onStart() {
         super.onStart();
+        taskRecyclerView.setAdapter(new TaskAdapter(DB.getTaskList()));
         taskRecyclerView.getAdapter().notifyDataSetChanged();
 
     }
@@ -224,14 +225,28 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
                 startActivity(myIntent);
             } else if (message.contains("filter")) {
 
-                filtertask = (ArrayList<TaskModel>) DB.getTaskList().stream().filter(task -> task.getStatus() == true).collect(Collectors.toList());
-                taskRecyclerView.setAdapter(new TaskAdapter(filtertask));
+                filtertask = (ArrayList<TaskModel>) DB.getTaskList().stream().filter(task -> task.getStatus() == false).collect(Collectors.toList());
+                if(filtertask.isEmpty()){
+                    speaker.speak("There isn't mark tasks", QUEUE_FLUSH, null, "aleix");
+                }else{
+                    taskRecyclerView.setAdapter(new TaskAdapter(filtertask));
+                    taskRecyclerView.getAdapter().notifyDataSetChanged();
+                }
+
 
             }else if (message.contains("mark") || message.contains("marc")) {
                 String task = "";
                 Boolean trobat = false;
 
-                task = message.substring(message.lastIndexOf(" ") + 1);
+                int position = message.lastIndexOf("mark");
+                if(position < 0){
+                    position = message.lastIndexOf("marc");
+                }
+                if(message.length() >=5) {
+                    task = message.substring(position + 5);
+                }
+
+
 
                 for (int i = 0; i < DB.getTaskList().size(); ++i) {
                     if (task.equals(DB.getTaskList().get(i).getName().toLowerCase())) {
@@ -250,11 +265,10 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
                 String task = "";
                 Boolean trobat = false;
 
-                Pattern object = Pattern.compile("delete (.*?) task");
-                Matcher matcher = object.matcher(message);
-                while (matcher.find()) {
-                    task = matcher.group(1);
+                if(message.length() >= 7) {
+                    task = message.substring(message.lastIndexOf("delete") + 1 + "delete".length());
                 }
+
                 for (int i = 0; i < DB.getTaskList().size(); ++i) {
                     if (task.equals(DB.getTaskList().get(i).getName().toLowerCase())) {
                         trobat = true;
@@ -262,11 +276,11 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
                         targetdel = task;
                     }
                 }
-                if (trobat) {
+                if (trobat && !task.equals("")) {
                     waitdelete = true;
                     speaker.speak("Are you sure that you want to remove " + task + "?", QUEUE_FLUSH, null, "aleix");
                 } else {
-                    speaker.speak("This product doesn't exists", QUEUE_FLUSH, null, "aleix");
+                    speaker.speak("This task doesn't exists", QUEUE_FLUSH, null, "aleix");
                 }
             }
             else{
@@ -275,10 +289,12 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
         }
         else {
             waitdelete = false;
-            if (message.contains("yes")) {
+            if (message.contains("yes") || message.contains("ies")) {
                 DB.getTaskList().get(itempdel).delete();
                 DB.getTaskList().remove(DB.getTaskList().get(itempdel));
+                taskRecyclerView.setAdapter(new TaskAdapter(DB.getTaskList()));
                 taskRecyclerView.getAdapter().notifyDataSetChanged();
+                taskRecyclerView.scrollToPosition(DB.getTaskList().size() - 1);
                 speaker.speak("Succesfully deleted" + targetdel, QUEUE_FLUSH, null, "aleix");
             } else if (message.contains("no")) {
                 waitdelete = false;
