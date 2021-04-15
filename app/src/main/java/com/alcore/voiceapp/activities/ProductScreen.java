@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -52,6 +54,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
     private String targetdel;
     private Boolean waitdelete = false;
     private  ItemModel list = null;
+    private Boolean ENABLED;
     private static final int RECORD_AUDIO_CODE = 100;
 
 
@@ -66,6 +69,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
         itemname.setText(name);
 
         listid = (int) getIntent().getLongExtra("listID",0);
+        ENABLED = getIntent().getBooleanExtra("isEnable",false);
 
 
 
@@ -98,6 +102,15 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
 
             }
         });
+    }
+
+    static public void customsound(Context c){
+        try {
+            MediaPlayer media = MediaPlayer.create(c, R.raw.correct);
+            media.start();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -251,6 +264,9 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                     productRecyclerView.setAdapter(new ProductAdapter(list.getProducts()));
                     productRecyclerView.getAdapter().notifyDataSetChanged();
                     productRecyclerView.scrollToPosition(list.getProducts().size() - 1);
+                    if (ENABLED) {
+                        customsound(ProductScreen.this);
+                    }
                 } else {
                     speaker.speak("This product already exist", QUEUE_FLUSH, null, "aleix");
                 }
@@ -284,6 +300,9 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                 list.getProducts().remove(list.getProducts().get(itempdel));
                 productRecyclerView.getAdapter().notifyDataSetChanged();
                 speaker.speak("Succesfully deleted" + targetdel, QUEUE_FLUSH, null, "aleix");
+                if (ENABLED) {
+                    customsound(ProductScreen.this);
+                }
             }else if(message.contains("no")){
                 waitdelete = false;
             }else{

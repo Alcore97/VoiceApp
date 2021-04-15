@@ -11,9 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -43,7 +49,6 @@ import static android.speech.tts.TextToSpeech.QUEUE_FLUSH;
 public class ItemScreen extends AppCompatActivity implements RecognitionListener, ItemAdapter.ItemController {
 
 
-
     private RecyclerView shopRecyclerView;
     private TextView itemname;
     private String name;
@@ -55,6 +60,8 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
     private int itempdel;
     private String targetdel;
     private Boolean waitdelete = false;
+    private Boolean ENABLED;
+    private MediaPlayer r;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +70,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
 
         micro = findViewById(R.id.micro);
 
+        ENABLED = getIntent().getBooleanExtra("isEnable",false);
 
         shopRecyclerView = findViewById(R.id.recycleshop);
         shopRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -183,6 +191,15 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
 
 }
 
+    static public void customsound(Context c){
+        try {
+            MediaPlayer media = MediaPlayer.create(c, R.raw.correct);
+            media.start();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void onReadyForSpeech(Bundle params) {
@@ -245,6 +262,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                 showAlertDialogButtonClicked(view);
             } else if (message.contains("create")) {
                 String newlist = "";
+                Boolean trobat = false;
 
                 Pattern object = Pattern.compile("create (.*?) list");
                 Matcher matcher = object.matcher(message);
@@ -252,11 +270,28 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                     newlist = matcher.group(1);
                 }
                 if(newlist != "") {
-                    ItemModel list = new ItemModel(newlist);
-                    DB.getShoppingList().add(list);
-                    list.save();
-                    shopRecyclerView.getAdapter().notifyDataSetChanged();
-                    shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
+                    for (int i = 0; i < DB.getShoppingList().size(); ++i) {
+                        if(newlist.equals(DB.getShoppingList().get(i).getName().toLowerCase())) {
+                            trobat = true;
+                        }
+                    }
+                    if(!trobat) {
+                        ItemModel list = new ItemModel(newlist);
+                        DB.getShoppingList().add(list);
+                        list.save();
+                        shopRecyclerView.getAdapter().notifyDataSetChanged();
+                        shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
+                        speaker.speak("Succesfully added" + newlist, QUEUE_FLUSH, null, "aleix");
+                        if (ENABLED) {
+                            customsound(ItemScreen.this);
+                        }
+                    }
+                    else{
+                        speaker.speak("This list already exist" + newlist, QUEUE_FLUSH, null, "aleix");
+                    }
+                }
+                else{
+                    speaker.speak("I don't undestood you, could you say it again?" + newlist, QUEUE_FLUSH, null, "aleix");
                 }
             } else if (message.contains("show")) {
                 String target = "";
@@ -277,6 +312,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                 Intent myIntent = new Intent(ItemScreen.this, ProductScreen.class);
                 myIntent.putExtra("productlist", DB.getShoppingList().get(itemp).getName());
                 myIntent.putExtra("listID", DB.getShoppingList().get(itemp).getId());
+                myIntent.putExtra("isEnable",ENABLED);
                 startActivity(myIntent);
 
             } else if (message.contains("put")) {
@@ -319,6 +355,10 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                     shopRecyclerView.getAdapter().notifyDataSetChanged();
                     shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
                     speaker.speak("Succesfully added" + newprod.getName(), QUEUE_FLUSH, null, "aleix");
+                    if (ENABLED) {
+                        customsound(ItemScreen.this);
+                    }
+
                 }else if(!trobatllista && targetlist != ""){
                     speaker.speak("This list doesn't exists ", QUEUE_FLUSH, null, "aleix");
                 }
@@ -352,6 +392,9 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                     speaker.speak("Are you sure that you want to remove " + target + "?", QUEUE_FLUSH, null, "aleix");
                 } else speaker.speak("This list doesn't exists", QUEUE_FLUSH, null, "aleix");
             }
+            else{
+                speaker.speak("I don't understood, could you say it again?", QUEUE_FLUSH, null, "aleix");
+            }
         }else{
             waitdelete = false;
             if(message.contains("yes")) {
@@ -360,6 +403,9 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                 shopRecyclerView.getAdapter().notifyDataSetChanged();
                 shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
                 speaker.speak("Succesfully deleted" + targetdel, QUEUE_FLUSH, null, "aleix");
+                if (ENABLED) {
+                    customsound(ItemScreen.this);
+                }
             }else if(message.contains("no")){
                 waitdelete = false;
             }else{

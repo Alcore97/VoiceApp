@@ -7,8 +7,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.Image;
@@ -40,9 +42,10 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
     private ImageView microalert;
     private TextToSpeech speaker;
     private View view;
-    public Boolean ENABLED =false;
+    public Boolean ENABLED;
     private ImageView arrowon;
     private ImageView arrowoff;
+    private Boolean openeddialog = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,8 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
         setContentView(R.layout.activity_main);
 
         micro = findViewById(R.id.micro);
+
+        cargarPreferencias();
 
 
         final RelativeLayout ButtonToShop = findViewById(R.id.l2);
@@ -82,6 +87,7 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(MainMenu.this, ItemScreen.class);
+                myIntent.putExtra("isEnable", ENABLED);
                 startActivity(myIntent);
             }
         });
@@ -90,6 +96,7 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(MainMenu.this, TaskScreen.class);
+                myIntent.putExtra("isEnable", ENABLED);
                 startActivity(myIntent);
             }
         });
@@ -97,6 +104,7 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(MainMenu.this, EventScreen.class);
+                myIntent.putExtra("isEnable", ENABLED);
                 startActivity(myIntent);
             }
         });
@@ -106,6 +114,11 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
                 showAlertDialogButtonClicked(view, ENABLED);
             }
         });
+    }
+
+    private void cargarPreferencias() {
+        SharedPreferences preferences = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+        ENABLED = preferences.getBoolean("activado", false);
     }
 
     public void showAlertDialogButtonClicked(View view, Boolean ENABLED) {
@@ -136,6 +149,9 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
         arrowoff = (ImageView) dialog.findViewById(R.id.arrowoff);
         arrowon = (ImageView) dialog.findViewById(R.id.arrowon);
         microalert = (ImageView) dialog.findViewById(R.id.microalert);
+        if(ENABLED == null){
+            ENABLED = false;
+        }
 
         if(ENABLED == false){
             arrowoff.setColorFilter(Color.argb(255,0,0,0));
@@ -145,6 +161,7 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             arrowon.setColorFilter(Color.argb(255,0,0,0));
             arrowoff.setColorFilter(Color.argb(255,126,120, 210));
         }
+        openeddialog = true;
     }
 
 
@@ -246,7 +263,9 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             );
             anim_waves.setDuration(50);
             micro.startAnimation(anim_waves);
-            microalert.startAnimation(anim_waves);
+            if(openeddialog) {
+                microalert.startAnimation(anim_waves);
+            }
         }
 
     }
@@ -281,12 +300,15 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
 
         if(message.contains("shopping")){
             Intent myIntent = new Intent(MainMenu.this, ItemScreen.class);
+            myIntent.putExtra("isEnable", ENABLED);
             startActivity(myIntent);
         }else if(message.contains("todo")){
             Intent myIntent = new Intent(MainMenu.this, TaskScreen.class);
+            myIntent.putExtra("isEnable", ENABLED);
             startActivity(myIntent);
         }else if(message.contains("event")){
             Intent myIntent = new Intent(MainMenu.this, EventScreen.class);
+            myIntent.putExtra("isEnable", ENABLED);
             startActivity(myIntent);
         }else if(message.contains("settings") || message.contains("setings")) {
             showAlertDialogButtonClicked(view, ENABLED);
@@ -294,6 +316,10 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             ENABLED = true;
             arrowon.setColorFilter(Color.argb(255,0,0,0));
             arrowoff.setColorFilter(Color.argb(255,126,120, 210));
+            SharedPreferences preferences = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("activado", ENABLED);
+            editor.commit();
         }else if(message.contains("enable") && ENABLED){
             speaker.speak("Sound already enabled", QUEUE_FLUSH, null, "aleix");
 
@@ -303,6 +329,10 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             ENABLED = false;
             arrowoff.setColorFilter(Color.argb(255,0,0,0));
             arrowon.setColorFilter(Color.argb(255,126,120, 210));
+            SharedPreferences preferences = getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("activado", ENABLED);
+            editor.commit();
         }else{
             speaker.speak("I don't undestood you, could you say it again?", QUEUE_FLUSH, null, "aleix");
         }

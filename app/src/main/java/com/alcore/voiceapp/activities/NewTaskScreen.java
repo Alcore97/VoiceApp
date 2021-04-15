@@ -6,8 +6,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -35,6 +37,7 @@ public class NewTaskScreen extends AppCompatActivity implements RecognitionListe
     private static final int RECORD_AUDIO_CODE = 100;
     private ImageView micro;
     private String target;
+    private Boolean ENABLED;
 
 
 
@@ -44,6 +47,8 @@ public class NewTaskScreen extends AppCompatActivity implements RecognitionListe
         setContentView(R.layout.activity_new_task);
 
         micro = findViewById(R.id.micro);
+
+        ENABLED = getIntent().getBooleanExtra("isEnable", false);
 
         speaker = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -60,6 +65,15 @@ public class NewTaskScreen extends AppCompatActivity implements RecognitionListe
 
             }
         });
+    }
+
+    static public void customsound(Context c){
+        try {
+            MediaPlayer media = MediaPlayer.create(c, R.raw.correct);
+            media.start();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void getSpeechInput(View view) {
@@ -156,6 +170,9 @@ public class NewTaskScreen extends AppCompatActivity implements RecognitionListe
                 TaskModel newtask = new TaskModel(target);
                 DB.getTaskList().add(newtask);
                 newtask.save();
+                if (ENABLED) {
+                    customsound(NewTaskScreen.this);
+                }
                 finish();
             }else if(message.contains("no")) {
                 placeholder.setText("");

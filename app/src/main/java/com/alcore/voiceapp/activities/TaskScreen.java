@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -49,6 +51,7 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
     private int itempdel;
     private String targetdel;
     private Boolean waitdelete = false;
+    private Boolean ENABLED;
 
 
     @Override
@@ -67,6 +70,8 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
 
         taskRecyclerView = findViewById(R.id.recyclestask);
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        ENABLED = getIntent().getBooleanExtra("isEnable",false);
 
 
         micro = findViewById(R.id.micro);
@@ -92,6 +97,15 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
             }
         });
 
+    }
+
+    static public void customsound(Context c){
+        try {
+            MediaPlayer media = MediaPlayer.create(c, R.raw.correct);
+            media.start();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void getSpeechInput(View view) {
@@ -206,6 +220,7 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
 
             } else if (message.contains("create")) {
                 Intent myIntent = new Intent(TaskScreen.this, NewTaskScreen.class);
+                myIntent.putExtra("isEnable", ENABLED);
                 startActivity(myIntent);
             } else if (message.contains("filter")) {
 
@@ -253,6 +268,9 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
                 } else {
                     speaker.speak("This product doesn't exists", QUEUE_FLUSH, null, "aleix");
                 }
+            }
+            else{
+                speaker.speak("I don't understood, could you say it again?", QUEUE_FLUSH, null, "aleix");
             }
         }
         else {

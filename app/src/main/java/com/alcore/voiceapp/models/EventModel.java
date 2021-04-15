@@ -5,23 +5,21 @@ import java.util.Date;
 
 public class EventModel implements Serializable {
 
+    public int id;
     public String name;
     public String date;
-    public String hour;
 
     public EventModel(){
-        this.name = "";
-        this.date = "";
-        this.hour = "";
+
     }
     public EventModel(String name){
         this();
         this.name = name;
     }
 
-    public EventModel(String name, String date,String hour){
+    public EventModel(String name, String date,int id){
         this.name = name;
         this.date = date;
-        this.hour = hour;
+        this.id = id;
     }
 }
