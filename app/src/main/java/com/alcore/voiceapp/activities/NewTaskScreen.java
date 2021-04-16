@@ -192,7 +192,7 @@ public class NewTaskScreen extends AppCompatActivity implements RecognitionListe
                //speaker.speak("Push the button and say the name of your task", QUEUE_FLUSH, null, "aleix");
             }
             else{
-                speaker.speak("I don't understood, could you say it again?", QUEUE_FLUSH, null, "aleix");
+                speaker.speak("I don't understand you, could you say it again?", QUEUE_FLUSH, null, "aleix");
             }
         }
 

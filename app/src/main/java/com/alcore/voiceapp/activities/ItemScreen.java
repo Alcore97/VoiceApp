@@ -327,13 +327,13 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                     speaker.speak("This list doesn't exists", QUEUE_FLUSH, null, "aleix");
                 }
 
-            } else if (message.contains("put")) {
+            } else if (message.contains("insert")) {
                 String targetlist = "";
                 String target = "";
 
                 Boolean trobatllista = false;
                 Boolean trobatprod = false;
-                Pattern object = Pattern.compile("put (.*?) (to|tu)");
+                Pattern object = Pattern.compile("insert (.*?) (to|tu)");
                 Matcher matcher = object.matcher(message);
                 while (matcher.find()) {
                     target = matcher.group(1);
@@ -407,7 +407,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                 } else speaker.speak("This list doesn't exists", QUEUE_FLUSH, null, "aleix");
             }
             else{
-                speaker.speak("I don't understood, could you say it again?", QUEUE_FLUSH, null, "aleix");
+                speaker.speak("I don't understand you, could you say it again?", QUEUE_FLUSH, null, "aleix");
             }
         }else{
             waitdelete = false;
@@ -424,7 +424,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                 waitdelete = false;
             }else{
                 waitdelete = true;
-                speaker.speak("I don't understood, could you say it again?", QUEUE_FLUSH, null, "aleix");
+                speaker.speak("I don't understand you, could you say it again?", QUEUE_FLUSH, null, "aleix");
             }
         }
 

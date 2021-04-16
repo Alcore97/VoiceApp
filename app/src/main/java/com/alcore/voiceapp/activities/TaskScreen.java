@@ -284,7 +284,7 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
                 }
             }
             else{
-                speaker.speak("I don't understood, could you say it again?", QUEUE_FLUSH, null, "aleix");
+                speaker.speak("I don't understand you, could you say it again?", QUEUE_FLUSH, null, "aleix");
             }
         }
         else {
@@ -300,7 +300,7 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
                 waitdelete = false;
             } else {
                 waitdelete = true;
-                speaker.speak("I don't understood, could you say it again?", QUEUE_FLUSH, null, "aleix");
+                speaker.speak("I don't understand you, could you say it again?", QUEUE_FLUSH, null, "aleix");
             }
         }
     }

@@ -303,7 +303,7 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             Intent myIntent = new Intent(MainMenu.this, ItemScreen.class);
             myIntent.putExtra("isEnable", ENABLED);
             startActivity(myIntent);
-        }else if(message.contains("todo")){
+        }else if(message.contains("todo") || message.contains("to-do") || message.contains("to do")){
             Intent myIntent = new Intent(MainMenu.this, TaskScreen.class);
             myIntent.putExtra("isEnable", ENABLED);
             startActivity(myIntent);
@@ -337,7 +337,7 @@ public class MainMenu extends AppCompatActivity implements RecognitionListener {
             editor.putBoolean("activado", ENABLED);
             editor.commit();
         }else{
-            speaker.speak("I don't undestood you, could you say it again?", QUEUE_FLUSH, null, "aleix");
+            speaker.speak("I don't understand you, could you say it again?", QUEUE_FLUSH, null, "aleix");
         }
 
 

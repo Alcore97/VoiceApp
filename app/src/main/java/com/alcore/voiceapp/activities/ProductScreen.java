@@ -262,7 +262,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                 if(message.length() >=7) {
                     prod = message.substring(position + 7);
                 }else{
-                    speaker.speak("I dont undestood, could you say it again?", QUEUE_FLUSH, null, "aleix");
+                    speaker.speak("I don't understand you, could you say it again?", QUEUE_FLUSH, null, "aleix");
                 }
 
 
@@ -311,7 +311,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                 }
             }
             else{
-                speaker.speak("I doesn't undestood, could you say it again?", QUEUE_FLUSH, null, "aleix");
+                speaker.speak("I don't understand you, could you say it again?", QUEUE_FLUSH, null, "aleix");
             }
         }else{
             waitdelete = false;
@@ -327,7 +327,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                 waitdelete = false;
             }else{
                 waitdelete = true;
-                speaker.speak("I don't understood, could you say it again?", QUEUE_FLUSH, null, "aleix");
+                speaker.speak("I don't understand you, could you say it again?", QUEUE_FLUSH, null, "aleix");
             }
         }
 

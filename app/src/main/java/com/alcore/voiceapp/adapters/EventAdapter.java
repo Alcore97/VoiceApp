@@ -38,6 +38,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
 
         DateTime aux = new DateTime(list.date);
         holder.date.setText(aux.toString("dd MMM YYYY HH:mm"));
+        String id = String.valueOf(list.getId());
+        holder.id.setText(id);
     }
 
     @Override
@@ -54,12 +56,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
 
         public final TextView nameevent;
         public final TextView date;
+        public final TextView id;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
             itemView.setOnClickListener(this);
             nameevent = itemView.findViewById(R.id.eventname);
             date = itemView.findViewById(R.id.label_date);
+            id = itemView.findViewById(R.id.eventid);
 
         }
 

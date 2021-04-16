@@ -13,6 +13,8 @@ import com.alcore.voiceapp.models.ItemModel;
 import com.alcore.voiceapp.models.ProductModel;
 import com.alcore.voiceapp.models.TaskModel;
 
+import org.joda.time.DateTime;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,11 +22,13 @@ import java.util.Calendar;
 
 public class DB  {
 
+
     private DB(){}
 
     private static ArrayList<ItemModel> listitems;
     private static ArrayList<TaskModel> listproducts;
     private static ArrayList<EventModel> listevents;
+    private static long count = 0;
 
 
 
@@ -60,7 +64,6 @@ public class DB  {
                     CalendarContract.Instances.EVENT_ID,       // 0
                     CalendarContract.Instances.BEGIN,         // 1
                     CalendarContract.Instances.TITLE,        // 2
-                       //3
             };
 
             // The indices for the projection array above.
@@ -68,12 +71,17 @@ public class DB  {
             final int PROJECTION_BEGIN_INDEX = 1;
             final int PROJECTION_TITLE_INDEX = 2;
 
+            DateTime currenttime = new DateTime();
+
+            DateTime weektime = currenttime.plusDays(7);
+
+
             // Specify the date range you want to search for recurring event instances
             Calendar beginTime = Calendar.getInstance();
-            beginTime.set(2021, 3, 14, 8, 0);
+            beginTime.set(currenttime.getYear(), currenttime.getMonthOfYear()-1, currenttime.getDayOfMonth(), 0, 0);
             long startMillis = beginTime.getTimeInMillis();
             Calendar endTime = Calendar.getInstance();
-            endTime.set(2021, 3, 15, 23, 59);
+            endTime.set(weektime.getYear(), weektime.getMonthOfYear()-1, weektime.getDayOfMonth(), 23, 59);
             long endMillis = endTime.getTimeInMillis();
 
 
@@ -87,12 +95,13 @@ public class DB  {
             ContentUris.appendId(builder, endMillis);
 
             // Submit the query
-            Cursor cur =  c.getContentResolver().query(builder.build(), INSTANCE_PROJECTION, null, null, null);
+            Cursor cur =  c.getContentResolver().query(builder.build(), INSTANCE_PROJECTION, CalendarContract.Instances.ALL_DAY + "= 0", null, null);
 
 
             listevents = new ArrayList<>();
             while (cur.moveToNext()) {
-                // Get the field values
+                ++count;
+
                 long eventID = cur.getLong(PROJECTION_ID_INDEX);
                 long beginVal = cur.getLong(PROJECTION_BEGIN_INDEX);
                 String title = cur.getString(PROJECTION_TITLE_INDEX);
@@ -101,7 +110,8 @@ public class DB  {
                 datatime.setTimeInMillis(beginVal);
 
                 EventModel event = new EventModel();
-                event.setId(eventID);
+                event.setId(count);
+                event.setIdCalendar(eventID);
                 event.name = title;
                 event.date = datatime.getTime();
 

@@ -19,14 +19,25 @@
             android:id="@+id/eventname"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_alignParentStart="true"
             android:layout_toStartOf="@id/icon_calendar"
-            android:paddingLeft="25dp"
+            android:layout_toEndOf="@+id/eventid"
+            android:paddingLeft="10dp"
             android:text="Classe PTDMA"
             android:gravity="center_vertical"
             android:textColor="@color/black"
             android:maxLines="1"
             android:ellipsize="end">
+        </TextView>
+
+        <TextView
+            android:id="@+id/eventid"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:paddingLeft="15dp"
+            android:text="15"
+            android:gravity="center_vertical"
+            android:textColor="@color/black">
         </TextView>
 
         <TextView
