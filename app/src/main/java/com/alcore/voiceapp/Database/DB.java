@@ -33,7 +33,7 @@ public class DB  {
 
 
     public static ArrayList<ItemModel> getShoppingList(){
-        if(listitems == null){
+
             /*ItemModel.deleteAll(ItemModel.class);
 
             ItemModel lista1 = new ItemModel("Mediamarkt");
@@ -42,11 +42,9 @@ public class DB  {
 
             listitems = (ArrayList<ItemModel>) ItemModel.listAll(ItemModel.class);
 
-        }
         return listitems;
     }
     public static  ArrayList<TaskModel> getTaskList(){
-        if(listproducts == null){
             /*TaskModel.deleteAll(TaskModel.class);
 
             TaskModel lista1 = new TaskModel("Estudiar");
@@ -54,12 +52,10 @@ public class DB  {
 
             listproducts = (ArrayList<TaskModel>) TaskModel.listAll(TaskModel.class);
 
-        }
         return listproducts;
     }
 
     public static ArrayList<EventModel> getEventList(Context c){
-        if(listevents == null){
             final String[] INSTANCE_PROJECTION = new String[] {
                     CalendarContract.Instances.EVENT_ID,       // 0
                     CalendarContract.Instances.BEGIN,         // 1
@@ -99,6 +95,7 @@ public class DB  {
 
 
             listevents = new ArrayList<>();
+            count = 0;
             while (cur.moveToNext()) {
                 ++count;
 
@@ -118,9 +115,7 @@ public class DB  {
 
                 listevents.add(event);
             }
-        }
-
-        return listevents;
+            return listevents;
     }
 
 

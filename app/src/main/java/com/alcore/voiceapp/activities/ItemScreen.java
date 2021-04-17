@@ -285,7 +285,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                         ItemModel list = new ItemModel(newlist);
                         DB.getShoppingList().add(list);
                         list.save();
-                        shopRecyclerView.getAdapter().notifyDataSetChanged();
+                        shopRecyclerView.setAdapter(new ItemAdapter(DB.getShoppingList(),this));
                         shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
                         speaker.speak("Succesfully added" + newlist, QUEUE_FLUSH, null, "aleix");
                         if (ENABLED) {
@@ -366,7 +366,8 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
                     DB.getShoppingList().get(itemp).getProducts().add(newprod);
                     DB.getShoppingList().get(itemp).save();
                     newprod.save();
-                    shopRecyclerView.getAdapter().notifyDataSetChanged();
+                    //todo:canviar per setadapter
+                    shopRecyclerView.setAdapter(new ItemAdapter(DB.getShoppingList(),this));
                     shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
                     speaker.speak("Succesfully added" + newprod.getName() + "to" +targetlist, QUEUE_FLUSH, null, "aleix");
                     if (ENABLED) {
@@ -413,8 +414,7 @@ public class ItemScreen extends AppCompatActivity implements RecognitionListener
             waitdelete = false;
             if(message.contains("yes") || message.contains("ies")) {
                 DB.getShoppingList().get(itempdel).delete();
-                DB.getShoppingList().remove(DB.getShoppingList().get(itempdel));
-                shopRecyclerView.getAdapter().notifyDataSetChanged();
+                shopRecyclerView.setAdapter(new ItemAdapter(DB.getShoppingList(),this));
                 shopRecyclerView.scrollToPosition(DB.getShoppingList().size() - 1);
                 speaker.speak("Succesfully deleted" + targetdel, QUEUE_FLUSH, null, "aleix");
                 if (ENABLED) {

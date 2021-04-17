@@ -8,7 +8,7 @@ import java.util.List;
 public class TaskModel extends SugarRecord implements Serializable {
 
     public String name;
-    public boolean status = false;
+    public boolean status;
 
     public TaskModel(){
         this.name = "";

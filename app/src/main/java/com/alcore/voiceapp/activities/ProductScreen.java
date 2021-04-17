@@ -244,7 +244,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                         trobat = true;
                         list.getProducts().get(i).setStatus(true);
                         list.getProducts().get(i).save();
-                        productRecyclerView.getAdapter().notifyDataSetChanged();
+                        productRecyclerView.setAdapter(new ProductAdapter(list.getProducts()));
                         productRecyclerView.scrollToPosition(list.getProducts().size() - 1);
                     }
                 }
@@ -277,7 +277,6 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
                     list.save();
                     product.save();
                     productRecyclerView.setAdapter(new ProductAdapter(list.getProducts()));
-                    productRecyclerView.getAdapter().notifyDataSetChanged();
                     productRecyclerView.scrollToPosition(list.getProducts().size() - 1);
                     if (ENABLED) {
                         customsound(ProductScreen.this);
@@ -318,7 +317,7 @@ public class ProductScreen extends AppCompatActivity implements RecognitionListe
             if(message.contains("yes") || message.contains("ies")) {
                 list.getProducts().get(itempdel).delete();
                 list.getProducts().remove(list.getProducts().get(itempdel));
-                productRecyclerView.getAdapter().notifyDataSetChanged();
+                productRecyclerView.setAdapter(new ProductAdapter(list.getProducts()));
                 speaker.speak("Succesfully deleted" + targetdel, QUEUE_FLUSH, null, "aleix");
                 if (ENABLED) {
                     customsound(ProductScreen.this);

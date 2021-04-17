@@ -88,7 +88,7 @@ public class NewEventScreen extends AppCompatActivity implements RecognitionList
             DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm");
             DateTime aux = formatter.parseDateTime(date);
             TextDate.setText(aux.toString("dd/MM/yyyy"));
-            TextHour.setText(aux.toString("HH:mm"));
+            TextHour.setText(aux.toString("hh:mm aa"));
         }else{
             TextDate.setText("");
             TextDate.setText("");
@@ -172,11 +172,10 @@ public class NewEventScreen extends AppCompatActivity implements RecognitionList
         if(matcher.matches()) {
             invalidinput = false;
             DateTimeFormatter formatter = null;
-            if(matcher.groupCount() == 2){
-               formatter = DateTimeFormat.forPattern("hh aa");
-
-            }else{
+            if(matcher.groupCount() == 3){
                 formatter = DateTimeFormat.forPattern("hh:mm aa");
+            }else{
+                formatter = DateTimeFormat.forPattern("hh aa");
             }
             finalhour = formatter.parseDateTime(hour.replace(".", ""));
             finaldatehour = new DateTime(finaldate.getYear(), finaldate.getMonthOfYear(), finaldate.getDayOfMonth(), finalhour.getHourOfDay(), finalhour.getMinuteOfHour());
@@ -313,7 +312,7 @@ public class NewEventScreen extends AppCompatActivity implements RecognitionList
             }else{
                 changehour(message);
                 if(!invalidinput) {
-                    TextHour.setText(finalhour.toString("HH:mm"));
+                    TextHour.setText(finalhour.toString("hh:mm aa"));
                 }
             }
         }
@@ -340,7 +339,8 @@ public class NewEventScreen extends AppCompatActivity implements RecognitionList
                 EventModel newmodel = new EventModel();
                 newmodel.name = finalname;
                 newmodel.date = finaldatehour.toDate();
-                newmodel.save();
+                newmodel.save(this);
+                finish();
             }
         } else {
             speaker.speak("I don't understand you, could you say it again?", QUEUE_FLUSH, null, "aleix");

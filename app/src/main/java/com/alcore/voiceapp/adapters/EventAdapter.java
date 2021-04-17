@@ -37,7 +37,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         holder.nameevent.setText(list.name);
 
         DateTime aux = new DateTime(list.date);
-        holder.date.setText(aux.toString("dd MMM YYYY HH:mm"));
+        holder.date.setText(aux.toString("dd MMM YYYY hh:mm aa"));
         String id = String.valueOf(list.getId());
         holder.id.setText(id);
     }

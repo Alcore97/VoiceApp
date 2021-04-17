@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.alcore.voiceapp.Database.DB;
 import com.alcore.voiceapp.adapters.EventAdapter;
+import com.alcore.voiceapp.adapters.TaskAdapter;
 import com.alcore.voiceapp.models.EventModel;
 import com.alcore.voiceapp.R;
 
@@ -57,7 +58,11 @@ public class EventScreen extends AppCompatActivity implements RecognitionListene
     private boolean waitdelete = false;
     private String targetdel;
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        eventRecyclerView.setAdapter(new EventAdapter(DB.getEventList(this),this));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -363,7 +368,6 @@ public class EventScreen extends AppCompatActivity implements RecognitionListene
             if(message.contains("yes") || message.contains("ies")) {
                 DB.getEventList(this).get(itempdel).delete(this);
                 eventRecyclerView.setAdapter(new EventAdapter(DB.getEventList(this),this));
-                eventRecyclerView.getAdapter().notifyDataSetChanged();
                 speaker.speak("Succesfully deleted" + targetdel, QUEUE_FLUSH, null, "aleix");
                 if (ENABLED) {
                     customsound(EventScreen.this);

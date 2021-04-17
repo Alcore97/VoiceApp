@@ -32,6 +32,7 @@ import com.alcore.voiceapp.adapters.TaskAdapter;
 import com.alcore.voiceapp.models.TaskModel;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,7 +59,6 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
     protected void onStart() {
         super.onStart();
         taskRecyclerView.setAdapter(new TaskAdapter(DB.getTaskList()));
-        taskRecyclerView.getAdapter().notifyDataSetChanged();
 
     }
 
@@ -230,7 +230,6 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
                     speaker.speak("There isn't mark tasks", QUEUE_FLUSH, null, "aleix");
                 }else{
                     taskRecyclerView.setAdapter(new TaskAdapter(filtertask));
-                    taskRecyclerView.getAdapter().notifyDataSetChanged();
                 }
 
 
@@ -244,17 +243,22 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
                 }
                 if(message.length() >=5) {
                     task = message.substring(position + 5);
+                }else{
+                    speaker.speak("This task doesn't exists", QUEUE_FLUSH, null, "aleix");
                 }
 
+                List<TaskModel> tasklist = DB.getTaskList();
 
 
-                for (int i = 0; i < DB.getTaskList().size(); ++i) {
-                    if (task.equals(DB.getTaskList().get(i).getName().toLowerCase())) {
+
+                for (int i = 0; i < tasklist.size(); ++i) {
+                    if (task.equals(tasklist.get(i).getName().toLowerCase())) {
                         trobat = true;
-                        DB.getTaskList().get(i).setStatus(true);
-                        DB.getTaskList().get(i).save();
-                        taskRecyclerView.getAdapter().notifyDataSetChanged();
-                        taskRecyclerView.scrollToPosition(DB.getTaskList().size() - 1);
+                        tasklist.get(i).setStatus(true);
+                        tasklist.get(i).save();
+                        taskRecyclerView.setAdapter(new TaskAdapter(tasklist));
+                        taskRecyclerView.scrollToPosition(tasklist.size() - 1);
+                        break;
                     }
                 }
                 if (!trobat) {
@@ -293,7 +297,6 @@ public class TaskScreen extends AppCompatActivity implements RecognitionListener
                 DB.getTaskList().get(itempdel).delete();
                 DB.getTaskList().remove(DB.getTaskList().get(itempdel));
                 taskRecyclerView.setAdapter(new TaskAdapter(DB.getTaskList()));
-                taskRecyclerView.getAdapter().notifyDataSetChanged();
                 taskRecyclerView.scrollToPosition(DB.getTaskList().size() - 1);
                 speaker.speak("Succesfully deleted" + targetdel, QUEUE_FLUSH, null, "aleix");
             } else if (message.contains("no")) {
